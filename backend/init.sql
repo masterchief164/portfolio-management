@@ -4,7 +4,7 @@ CREATE TABLE users(
 	lname varchar(50),
 	age INT CONSTRAINT valid_age CHECK (age > 18),
 	isPm bool
-)
+);
 
 
 CREATE TABLE assets(
@@ -12,9 +12,9 @@ CREATE TABLE assets(
 	symbol VARCHAR(50),
 	sector VARCHAR(50),
 	asset_type VARCHAR(50)
-)
+);
 
-CREATE TYPE transac_type as ENUM ('buy', 'sell')
+CREATE TYPE transac_type as ENUM ('buy', 'sell');
 
 CREATE TABLE transactions(
 	tx_id SERIAL PRIMARY KEY,
@@ -28,7 +28,7 @@ CREATE TABLE transactions(
 	CONSTRAINT fk_pm FOREIGN KEY(pm_id) REFERENCES users(user_id),
 	CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id),
 	CONSTRAINT fk_asset FOREIGN KEY(asset_id) REFERENCES assets(asset_id)
-)
+);
 
 CREATE TABLE pm_client_relationships (
 	relation_id SERIAL PRIMARY KEY,
