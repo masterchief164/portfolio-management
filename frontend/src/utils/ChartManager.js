@@ -5,7 +5,7 @@ import {
 } from "lightweight-charts";
 
 export class ChartManager {
-    constructor(ref, initialData, layout, type) {
+    constructor(ref, initialData, layout, type, mode) {
         const chart = createLightWeightChart(ref, {
             // autoSize: true,
             overlayPriceScales: {
@@ -23,9 +23,11 @@ export class ChartManager {
             grid: {
                 horzLines: {
                     visible: true,
+                    color: mode == "dark" ? "#444" : "#D6DCDE",
                 },
                 vertLines: {
                     visible: true,
+                    color: mode == "dark" ? "#444" : "#D6DCDE",
                 },
             },
             layout: {
@@ -33,7 +35,7 @@ export class ChartManager {
                     type: ColorType.Solid,
                     color: layout.background,
                 },
-                textColor: "black",
+                textColor: mode == "dark" ? "white" : "black",
             },
         });
         this.chart = chart;

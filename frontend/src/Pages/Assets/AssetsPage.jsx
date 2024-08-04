@@ -4,16 +4,30 @@ import TradeView from "../../Components/TradeView";
 
 const AssetsPage = () => {
     const [period, setPeriod] = useState('1M');
+    const [stock, setStock] = useState(null);
+    const [mode, setMode] = useState("light")
 
     const handleChange = (event) => {
         setPeriod(event.target.value);
     };
-    console.log(period)
+    
+    const handleStock = (event, newValue) => {
+        setStock(newValue);
+    }
+
+    const handleMode = (event) => {
+        if(event.target.checked == true)
+            setMode("dark")
+        else
+            setMode("light");
+    }
+
+    console.log(mode)
 
     return (
-        <div style={{height: "500px", width: "1180px", marginLeft: "245px", marginTop: "100px"}}>
-            <AssetTopbar period={period} handleChange={handleChange}/>
-            <TradeView period={period} />
+        <div>
+            <AssetTopbar period={period} stock = {stock} handleStock={handleStock} handleChange={handleChange} handleMode={handleMode}/>
+            <TradeView period={period} mode={mode}/>
         </div>
     );
 };

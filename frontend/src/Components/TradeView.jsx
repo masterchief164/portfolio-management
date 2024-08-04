@@ -3,7 +3,7 @@ import { getKlinesPerDay } from '../utils/httpClient';
 import { ChartManager } from '../utils/ChartManager';
 import { calculateDateRange } from "../utils/utilFunctions"
 
-const TradeView = ({period, company, type}) => {
+const TradeView = ({period, company, type, mode}) => {
     console.log("Inside Trade View")
     const chartRef = useRef(null);
     const chartManagerRef = useRef(null);
@@ -12,7 +12,6 @@ const TradeView = ({period, company, type}) => {
         let klineData = [];
         try {
             let {fromDate, toDate} = calculateDateRange(period)
-            // console.log(fromDate, "   ", toDate)
             klineData = await getKlinesPerDay(fromDate, "AAPL");
             console.log(klineData)
         } catch (error) {}
@@ -21,7 +20,7 @@ const TradeView = ({period, company, type}) => {
             if (chartManagerRef.current) {
                 chartManagerRef.current.destroy();
             }
-            // console.log(klineData)
+            
             const chartManager = new ChartManager(
                 chartRef.current,
                 [
@@ -34,10 +33,11 @@ const TradeView = ({period, company, type}) => {
                     })),
                 ].sort((x, y) => (x.timestamp < y.timestamp ? -1 : 1)) || [],
                 {
-                    background: "#FFFFFF",
+                    background: (mode == "light") ? "#FFFFFF" : "#0e0f14",
                     color: "white",
                 },
-                "candle"
+                "candle",
+                mode
             );
 
             chartManagerRef.current = chartManager;
@@ -52,7 +52,7 @@ const TradeView = ({period, company, type}) => {
                 chartManagerRef.current = null;
             }
         };
-    }, [period, chartRef]);
+    }, [period, mode, chartRef]);
 
     return (
         <div ref={chartRef} style={{ height: "500px", width: "100%", marginTop: 4 }}> </div>
