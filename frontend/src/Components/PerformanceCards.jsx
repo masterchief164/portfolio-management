@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
@@ -33,7 +33,7 @@ const PerformanceCards = (total_invst, curr_val, gains_losses, returns) => {
             </CardContent>
         </React.Fragment>
     </div>
-  )
-}
+  );
+};
 
-export default PerformanceCards
+export default PerformanceCards;

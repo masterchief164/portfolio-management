@@ -1,13 +1,13 @@
-import { Typography, Box, colors } from '@mui/material'
-import React from 'react'
+import { Typography, Box, colors } from '@mui/material';
+import React from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import {LinearScale} from "chart.js/auto"
+import {LinearScale} from "chart.js/auto";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import appleLogo from "../assets/apple.png";
-import googleLogo from "../assets/google.png"
-import bmwLogo from "../assets/bmw.jpeg"
+import googleLogo from "../assets/google.png";
+import bmwLogo from "../assets/bmw.jpeg";
 import { Line } from "react-chartjs-2";
 // import { shadows } from '@mui/system';
 
@@ -30,8 +30,8 @@ const DashboardGraph = ({generateData}) => {
     const data = generateData();
 
     const handleClick = (e) => {
-        console.log(e.target.innerText)
-    }
+        console.log(e.target.innerText);
+    };
     return (
         <div>
             <Box style={{display: "flex", justifyContent: "space-between"}}>
@@ -75,7 +75,7 @@ const DashboardGraph = ({generateData}) => {
                 <Line data={data} options={options} />
             </Box>
         </div>
-    )
-}
+    );
+};
 
-export default DashboardGraph
+export default DashboardGraph;

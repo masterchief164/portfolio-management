@@ -1,6 +1,6 @@
-import { Typography, Box } from '@mui/material'
-import { Doughnut } from 'react-chartjs-2'
-import React from 'react'
+import { Typography, Box } from '@mui/material';
+import { Doughnut } from 'react-chartjs-2';
+import React from 'react';
 
 
 const PortfolioDiversity = ({data}) => {
@@ -8,12 +8,12 @@ const PortfolioDiversity = ({data}) => {
         maintainAspectRatio: true,
         aspectRatio: 1.26,
         pieceLabel: {
-            render: function(d) { return d.labels + " (" + d.percentage + "%)" },
+            render: function(d) { return d.labels + " (" + d.percentage + "%)"; },
             fontColor: '#000',
             position: 'outside',
             segment: true
         }
-    }
+    };
     
     return (
         <div style={{padding: "20px"}}>
@@ -23,7 +23,7 @@ const PortfolioDiversity = ({data}) => {
                 <Doughnut data={data} options={options}/>
             </Box>
         </div>
-    )
-}
+    );
+};
 
-export default PortfolioDiversity
+export default PortfolioDiversity;

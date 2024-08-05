@@ -1,19 +1,19 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef} from 'react';
 import { getKlinesPerDay } from '../utils/httpClient';
 import { ChartManager } from '../utils/ChartManager';
-import { calculateDateRange } from "../utils/utilFunctions"
+import { calculateDateRange } from "../utils/utilFunctions";
 
 const TradeView = ({period, company, type, mode}) => {
-    console.log("Inside Trade View")
+    console.log("Inside Trade View");
     const chartRef = useRef(null);
     const chartManagerRef = useRef(null);
 
     const getData = async() => {
         let klineData = [];
         try {
-            let {fromDate, toDate} = calculateDateRange(period)
+            let {fromDate, toDate} = calculateDateRange(period);
             klineData = await getKlinesPerDay(fromDate, "AAPL");
-            console.log(klineData)
+            console.log(klineData);
         } catch (error) {}
 
         if(chartRef) {
@@ -42,7 +42,7 @@ const TradeView = ({period, company, type, mode}) => {
 
             chartManagerRef.current = chartManager;
         }
-    }
+    };
 
     useEffect(() => {
         getData();
@@ -56,7 +56,7 @@ const TradeView = ({period, company, type, mode}) => {
 
     return (
         <div ref={chartRef} style={{ height: "500px", width: "100%", marginTop: 4 }}> </div>
-    )
-}
+    );
+};
 
-export default TradeView
+export default TradeView;
