@@ -27,6 +27,11 @@ const data = {
     ],
 };
 
+const options = {
+    maintainAspectRatio: true,
+    aspectRatio: 1.2
+}
+
 
 const PortfolioDiversity = () => {
   return (
@@ -34,7 +39,7 @@ const PortfolioDiversity = () => {
         <Typography variant='h6' fontWeight="500"> Portfolio Diversity </Typography>
 
         <Box style={{marginTop: "30px"}}>
-            <Doughnut data={data}/>
+            <Doughnut data={data} options={options}/>
         </Box>
     </div>
   )

@@ -16,7 +16,7 @@ const fluctuationRange = 5000; // Random fluctuation amount
 
 const generateData = () => {
     const data = [];
-    const labels = ['Jun 2021', 'Dec 2021', 'Jun 2022', 'Dec 2022', 'Jun 2023', 'Dec 2023'];
+    const labels = ['Jun 2021', 'Dec 2021', 'Jun 2022', 'Dec 2022', 'Jun 2023', 'Dec 2023', 'Jan 2024', 'Feb 2024', 'Mar 2024'];
     let currentValue = baseValue;
     for (let i = 0; i < labels.length; i++) {
         const fluctuation = Math.random() * fluctuationRange - fluctuationRange / 2;
@@ -56,7 +56,8 @@ const options = {
             text: 'Value (₹)'
             }
         }
-    }
+    },
+    aspectRatio: 1|3,
 };
 
 

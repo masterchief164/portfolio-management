@@ -27,7 +27,7 @@ const AssetsPage = () => {
     return (
         <div>
             <AssetTopbar period={period} stock = {stock} handleStock={handleStock} handleChange={handleChange} handleMode={handleMode}/>
-            <TradeView period={period} mode={mode}/>
+            {/* <TradeView period={period} mode={mode}/> */}
         </div>
     );
 };
