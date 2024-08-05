@@ -29,7 +29,7 @@ const data = {
 
 const options = {
     maintainAspectRatio: true,
-    aspectRatio: 1.2
+    aspectRatio: 1.34
 }
 
 

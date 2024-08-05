@@ -57,7 +57,7 @@ const options = {
             }
         }
     },
-    aspectRatio: 1|3,
+    aspectRatio: 3.4,
 };
 
 
