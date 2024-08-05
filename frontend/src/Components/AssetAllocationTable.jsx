@@ -1,0 +1,132 @@
+import React, { useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box } from '@mui/material';
+
+// Helper function for sorting
+const getComparator = (order, orderBy) => {
+  return (a, b) => {
+    if (orderBy === 'name' || orderBy === 'symbol') {
+      return (order === 'asc' ? a[orderBy].localeCompare(b[orderBy]) : b[orderBy].localeCompare(a[orderBy]));
+    }
+
+    // Convert values to numbers for numeric columns
+    const aValue = parseFloat(a[orderBy].replace(/[^0-9.-]/g, ''));
+    const bValue = parseFloat(b[orderBy].replace(/[^0-9.-]/g, ''));
+
+    return (order === 'asc' ? aValue - bValue : bValue - aValue);
+  };
+};
+
+const AssetAllocationTable = ({ data }) => {
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('name');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Filter data based on search query
+  const filteredData = data.filter(row =>
+    row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    row.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div style={{ height: '100%' }}>
+      <Box display="flex" alignItems="center" mb={2}>
+        <Typography variant="h6" style={{ flexShrink: 0, marginRight: '16px' }}>
+          Asset Allocation
+        </Typography>
+        <TextField
+          label="Search"
+          variant="outlined"
+          fullWidth
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </Box>
+      <TableContainer component={Paper} style={{ maxHeight: '100%' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === 'name'}
+                  direction={orderBy === 'name' ? order : 'asc'}
+                  onClick={() => handleRequestSort('name')}
+                >
+                  Name
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === 'symbol'}
+                  direction={orderBy === 'symbol' ? order : 'asc'}
+                  onClick={() => handleRequestSort('symbol')}
+                >
+                  Symbol
+                </TableSortLabel>
+              </TableCell>
+              <TableCell align="right">
+                <TableSortLabel
+                  active={orderBy === 'price'}
+                  direction={orderBy === 'price' ? order : 'asc'}
+                  onClick={() => handleRequestSort('price')}
+                >
+                  Price
+                </TableSortLabel>
+              </TableCell>
+              <TableCell align="right">
+                <TableSortLabel
+                  active={orderBy === 'quantity'}
+                  direction={orderBy === 'quantity' ? order : 'asc'}
+                  onClick={() => handleRequestSort('quantity')}
+                >
+                  Quantity
+                </TableSortLabel>
+              </TableCell>
+              <TableCell align="right">
+                <TableSortLabel
+                  active={orderBy === 'totalValueHeld'}
+                  direction={orderBy === 'totalValueHeld' ? order : 'asc'}
+                  onClick={() => handleRequestSort('totalValueHeld')}
+                >
+                  Total Value Held
+                </TableSortLabel>
+              </TableCell>
+              <TableCell align="right">
+                <TableSortLabel
+                  active={orderBy === 'percentageOfAllocation'}
+                  direction={orderBy === 'percentageOfAllocation' ? order : 'asc'}
+                  onClick={() => handleRequestSort('percentageOfAllocation')}
+                >
+                  Percentage of Allocation
+                </TableSortLabel>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredData.sort(getComparator(order, orderBy)).map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.symbol}</TableCell>
+                <TableCell align="right">{row.price}</TableCell>
+                <TableCell align="right">{row.quantity}</TableCell>
+                <TableCell align="right">{row.totalValueHeld}</TableCell>
+                <TableCell align="right">{row.percentageOfAllocation}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
+};
+
+export default AssetAllocationTable;

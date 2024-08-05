@@ -9,60 +9,29 @@ import appleLogo from "../assets/apple.png";
 import googleLogo from "../assets/google.png"
 import bmwLogo from "../assets/bmw.jpeg"
 import { Line } from "react-chartjs-2";
-import { shadows } from '@mui/system';
-
-const baseValue = 10000; // Starting point
-const fluctuationRange = 5000; // Random fluctuation amount
-
-const generateData = () => {
-    const data = [];
-    const labels = ['Jun 2021', 'Dec 2021', 'Jun 2022', 'Dec 2022', 'Jun 2023', 'Dec 2023'];
-    let currentValue = baseValue;
-    for (let i = 0; i < labels.length; i++) {
-        const fluctuation = Math.random() * fluctuationRange - fluctuationRange / 2;
-        currentValue += fluctuation + 5000; // Ensure overall increase
-        data.push(currentValue);
-    }
-
-    return {
-        labels,
-        datasets: [
-            {
-                data,
-                fill: false,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                tension: 0.1,
-            },
-        ],
-    };
-};
+// import { shadows } from '@mui/system';
 
 const options = {
     responsive: true,
     plugins: {
-        // title: {
-        //     display: true,
-        //     text: 'Overall Performance',
-        // },
-        legend: {
-            display: false, // Remove legend as it's not necessary in this case
-        },
+            legend: {
+                display: false, // Remove legend as it's not necessary in this case
+            },
         },
         scales: {
         y: {
             beginAtZero: true,
-            title: {
-            display: false,
-            text: 'Value (₹)'
-            }
         }
-    }
+    },
+    aspectRatio: 3.4,
 };
 
+const DashboardGraph = ({generateData}) => {
+    const data = generateData();
 
-const data = generateData();
-
-const DashboardGraph = () => {
+    const handleClick = (e) => {
+        console.log(e.target.innerText)
+    }
     return (
         <div>
             <Box style={{display: "flex", justifyContent: "space-between"}}>
@@ -71,7 +40,7 @@ const DashboardGraph = () => {
                         Overall Performance
                     </Typography>
                     <Typography variant='h5' fontWeight="500" paddingBottom="8px">
-                        ₹ 252,501
+                        $ 252,501
                     </Typography>
                     <Box>
                         <Typography variant='h8' style={{backgroundColor: "#E1F6E1", marginLeft: "18px"}} color="#81C082">
@@ -86,9 +55,9 @@ const DashboardGraph = () => {
                 <Box>
                     <Box sx={{display: 'flex',flexDirection: 'column',alignItems: 'center','& > *': {m: 1,}, marginTop: "10px"}}>
                         <ButtonGroup variant="outline" aria-label="Basic button group">
-                            <Button>Yearly</Button>
-                            <Button>Monthly</Button>
-                            <Button>Daily</Button>
+                            <Button onClick={handleClick}>Yearly</Button>
+                            <Button onClick={handleClick}>Monthly</Button>
+                            <Button onClick={handleClick}>Daily</Button>
                         </ButtonGroup>
                     </Box>
                     <Box style={{paddingRight: "20px"}}>

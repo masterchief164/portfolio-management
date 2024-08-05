@@ -198,8 +198,8 @@ const AssetTopbar = ({period, handleChange, handleStock, stock, mode, handleMode
 
     return (
         <div style={{display: "flex", borderBottom: "3px solid black", paddingBottom: "15px", marginTop: "-20px", marginBottom: "10px", justifyContent: "space-between"}}>
-            <div style={{display: "flex", justifyContent: "space-between", height: "30px"}}>
-                <Stack spacing={2} sx={{ width: 300}}>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+                <Stack spacing={2} size="small" sx={{ width: 300}}>
                     <Autocomplete
                         freeSolo
                         id="free-solo-2-demo"
@@ -221,13 +221,14 @@ const AssetTopbar = ({period, handleChange, handleStock, stock, mode, handleMode
                 </Stack>
             </div>
 
-            <div style={{display: "flex", rowGap: "50px"}}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 100 }}>
+            <div style={{display: "flex"}}>
+                <FormControl variant="standard" size='small' sx={{ m: 1, minWidth: 80, marginLeft: "10px", marginRight: "50px"}}>
                     <Select
                     id="demo-simple-select-standard"
                     value={period}
                     onChange={handleChange}
                     displayEmpty
+                    variant='outlined'
                     >
                         {
                             time.map(t => { return <MenuItem value={t} key={t}> {t} </MenuItem>})
