@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import AssetRow from "../../Components/AssetRow.jsx";
+import DashboardPerformance from "../../Components/DashboardPerformance.jsx";
 import AssetAllocationTable from "../../Components/AssetAllocationTable.jsx";
 import { Container, Grid, Paper, Typography } from '@mui/material';
 import WatchlistTable from "../../Components/WatchList.jsx";
@@ -41,8 +42,12 @@ const HomePage = () => {
     const rows = Array.from({ length: 50}, (_, i) => i + 1);
     return (
       <Container>
-      <Grid container spacing={2}>
-        
+      <Grid>
+      <Box sx={{overflowY: 'hidden', backgroundColor: "#F4F7FF", marginTop: "-42px", marginLeft: "-10px", marginRight: "-8px"}}>
+            <DashboardPerformance></DashboardPerformance>
+      </Box>
+      </Grid>
+      
         {/* Bottom Section with Asset Allocation Table */}
         <Grid container spacing={2} style={{ flexGrow: 1, marginLeft: 'auto' }}>
           <Grid container spacing={2} style={{ flex: '1 1 auto', marginTop: '16px' }}>
@@ -65,9 +70,7 @@ const HomePage = () => {
             
           </Grid>
         </Grid>
-      </Grid>
-    </Container>
-    
+</Container>
     );
 };
 
