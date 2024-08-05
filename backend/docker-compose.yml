@@ -1,0 +1,6 @@
+services:
+  web:
+    container_name: flask-backend
+    build: .
+    ports:
+      - 8080:8000
