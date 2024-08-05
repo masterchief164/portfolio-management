@@ -198,7 +198,7 @@ const AssetTopbar = ({period, handleChange, handleStock, stock, mode, handleMode
 
     return (
         <div style={{display: "flex", borderBottom: "3px solid black", paddingBottom: "15px", marginTop: "-20px", marginBottom: "10px", justifyContent: "space-between"}}>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
+            <div style={{display: "flex", justifyContent: "space-between", height: "30px"}}>
                 <Stack spacing={2} sx={{ width: 300}}>
                     <Autocomplete
                         freeSolo

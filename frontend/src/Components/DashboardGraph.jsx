@@ -9,6 +9,7 @@ import appleLogo from "../assets/apple.png";
 import googleLogo from "../assets/google.png"
 import bmwLogo from "../assets/bmw.jpeg"
 import { Line } from "react-chartjs-2";
+import { shadows } from '@mui/system';
 
 const baseValue = 10000; // Starting point
 const fluctuationRange = 5000; // Random fluctuation amount
@@ -64,7 +65,7 @@ const data = generateData();
 const DashboardGraph = () => {
     return (
         <div>
-            <Box style={{display: "flex", justifyContent: "space-between" }}>
+            <Box style={{display: "flex", justifyContent: "space-between"}}>
                 <Box padding="15px 0px 5px 15px">
                     <Typography variant='h6' fontWeight="400" padding="0px 0px 7px 0px">
                         Overall Performance
