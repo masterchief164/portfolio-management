@@ -1,10 +1,10 @@
-import { Box } from '@mui/material'
-import React from 'react'
-import DashboardGraph from './DashboardGraph'
-import PortfolioDiversity from './PortfolioDiversity'
-import PerformanceCards from './PerformanceCards'
-import { data } from "../utils/MockPieChartData"
-import { generateData } from '../utils/MockOverallPerformanceData'
+import { Box } from '@mui/material';
+import React from 'react';
+import DashboardGraph from './DashboardGraph';
+import PortfolioDiversity from './PortfolioDiversity';
+import PerformanceCards from './PerformanceCards';
+import { data } from "../utils/MockPieChartData";
+import { generateData } from '../utils/MockOverallPerformanceData';
 
 const DashboardPerformance = () => {
   return (
@@ -23,7 +23,7 @@ const DashboardPerformance = () => {
           </Box>
         </div>
     </div>
-  )
-}
+  );
+};
 
-export default DashboardPerformance
+export default DashboardPerformance;

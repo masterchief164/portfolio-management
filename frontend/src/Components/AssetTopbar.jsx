@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { TextField } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -65,7 +65,7 @@ const time = [
     "6M",
     "1Y",
     "5Y"
-]
+];
 
 const top100Films = [
     { title: 'The Shawshank Redemption', year: 1994 },
@@ -231,7 +231,7 @@ const AssetTopbar = ({period, handleChange, handleStock, stock, mode, handleMode
                     variant='outlined'
                     >
                         {
-                            time.map(t => { return <MenuItem value={t} key={t}> {t} </MenuItem>})
+                            time.map(t => { return <MenuItem value={t} key={t}> {t} </MenuItem>;})
                         }
                     </Select>
                 </FormControl>
@@ -243,7 +243,7 @@ const AssetTopbar = ({period, handleChange, handleStock, stock, mode, handleMode
                 </FormGroup>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default AssetTopbar;
