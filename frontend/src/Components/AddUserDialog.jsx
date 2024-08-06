@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Dialog,
     DialogActions,
@@ -6,7 +6,6 @@ import {
     DialogTitle,
     TextField,
     Button,
-    Box
 } from '@mui/material';
 
 export default function AddUserDialog({ open, onClose, onAddUser }) {
