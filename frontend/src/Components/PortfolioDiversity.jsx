@@ -1,6 +1,5 @@
 import { Typography, Box } from '@mui/material';
 import { Doughnut } from 'react-chartjs-2';
-import React from 'react';
 
 
 const PortfolioDiversity = ({data}) => {

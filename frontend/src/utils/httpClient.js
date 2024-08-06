@@ -1,10 +1,11 @@
 import axios from "axios";
 
 export const getKlinesPerDay = async (from, company) => {
+    if(company == "") company = "AAPL";
     console.log(
-        `https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?from=${from}&apikey=9CvSlk6Kio26BidnuMyjEC2JC1b6ZyEL`
+        `https://financialmodelingprep.com/api/v3/historical-price-full/${company}?from=${from}&apikey=9CvSlk6Kio26BidnuMyjEC2JC1b6ZyEL`
     );
-    const kLineData = [];
+    
     let config = {
         method: "get",
         maxBodyLength: Infinity,
