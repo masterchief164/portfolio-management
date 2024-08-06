@@ -1,15 +1,15 @@
 import axios from "axios";
 
 export const getKlinesPerDay = async (from, company) => {
-    if(company == "") company = "AAPL";
+    if(company === "") company = "AAPL";
     console.log(
-        `https://financialmodelingprep.com/api/v3/historical-price-full/${company}?from=${from}&apikey=9CvSlk6Kio26BidnuMyjEC2JC1b6ZyEL`
+        `https://financialmodelingprep.com/api/v3/historical-price-full/${company}?from=${from}&apikey=${import.meta.env.VITE_FIN_MOD_API_KEY}`
     );
     
     let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url: `https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?from=${from}&apikey=9CvSlk6Kio26BidnuMyjEC2JC1b6ZyEL`,
+        url: `https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?from=${from}&apikey=${import.meta.env.VITE_FIN_MOD_API_KEY}`,
         headers: {},
     };
 
