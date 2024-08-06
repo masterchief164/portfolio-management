@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import React from 'react';
 import DashboardGraph from './DashboardGraph';
 import PortfolioDiversity from './PortfolioDiversity';
 import PerformanceCards from './PerformanceCards';

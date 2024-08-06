@@ -1,14 +1,16 @@
-import { Typography, Box, colors } from '@mui/material';
-import React from 'react';
+import { Typography, Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import {LinearScale} from "chart.js/auto";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import appleLogo from "../assets/apple.png";
 import googleLogo from "../assets/google.png";
 import bmwLogo from "../assets/bmw.jpeg";
 import { Line } from "react-chartjs-2";
+import {Chart as ChartJS, registerables} from 'chart.js';
+
+
+ChartJS.register(...registerables);
 // import { shadows } from '@mui/system';
 
 const options = {
@@ -23,7 +25,8 @@ const options = {
             beginAtZero: true,
         }
     },
-    aspectRatio: 3.4,
+    aspectRatio: 3,
+    // maintainAspectRatio: false
 };
 
 const DashboardGraph = ({generateData}) => {
@@ -71,7 +74,7 @@ const DashboardGraph = ({generateData}) => {
                 </Box>
             </Box>
 
-            <Box style={{padding: "10px 2px"}}>
+            <Box style={{padding: "10px 2px", width: "100%"}}>
                 <Line data={data} options={options} />
             </Box>
         </div>
