@@ -26,14 +26,10 @@ const Sidebar = () => (
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                 {/*todo: need an app icon here*/}
                 <Typography variant="h6" noWrap component="div">
-                    Portfolio Manager
+                    Portfolio Pilot
                 </Typography>
                 <Box sx={{display: 'flex', justifyContent: 'space-around', alignItems: 'center'}}>
                     <AccountMenu/>
-                    {/*<Typography>Shaswat Gupta</Typography>*/}
-                    {/*<Button>*/}
-                    {/*    <Avatar src={GoogleIcon} alt={'Google Icon'}/>*/}
-                    {/*</Button>*/}
                 </Box>
             </Toolbar>
         </AppBar>
