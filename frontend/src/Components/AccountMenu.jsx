@@ -1,20 +1,40 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
+import { useState, useEffect } from 'react';
+import {
+    Box,
+    Avatar,
+    Menu,
+    MenuItem,
+    ListItemIcon,
+    Divider,
+    IconButton,
+    Typography,
+    Tooltip
+} from '@mui/material';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Logout from '@mui/icons-material/Logout';
+import AddUserDialog from './AddUserDialog'; 
+import randomColor from 'randomcolor'; 
 
 export default function AccountMenu() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [loggedIn, setLoggedIn] = React.useState(true);
-    const [user, setUser] = React.useState('Shaswat Gupta');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(true);
+    const [selectedUser, setSelectedUser] = useState({ id: 1, firstName: 'Shaswat', lastName: 'Gupta' });
+    const [users, setUsers] = useState([
+        { id: 1, firstName: 'Shaswat', lastName: 'Gupta', age: 25, address: '123 Main St' },
+        { id: 2, firstName: 'John', lastName: 'Doe', age: 30, address: '456 Elm St' },
+        { id: 3, firstName: 'Jane', lastName: 'Doe', age: 28, address: '789 Maple St' }
+    ]);
+    const [userColors, setUserColors] = useState({});
+    const [isAddUserDialogOpen, setAddUserDialogOpen] = useState(false);
+
+    useEffect(() => {
+        const colors = {};
+        users.forEach(user => {
+            colors[user.id] = randomColor();
+        });
+        setUserColors(colors);
+    }, [users]);
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -26,27 +46,44 @@ export default function AccountMenu() {
         setLoggedIn(false);
         handleClose();
     };
-
     const selectUser = (user) => {
-        setUser(user);
+        setSelectedUser(user);
         handleClose();
     };
+    const handleAddUser = (newUser) => {
+        const newId = users.length + 1;
+        setUsers((prevUsers) => [...prevUsers, { ...newUser, id: newId }]);
+        setUserColors((prevColors) => ({ ...prevColors, [newId]: randomColor() }));
+        setAddUserDialogOpen(false); 
+    };
+    const openAddUserDialog = () => {
+        setAddUserDialogOpen(true);
+        handleClose();
+    };
+    const closeAddUserDialog = () => {
+        setAddUserDialogOpen(false);
+    };
 
-    const users = ['Shaswat Gupta', 'John Doe', 'Jane Doe'];
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                <Typography sx={{ mr: 2 }}>{user}</Typography>
+                <Typography sx={{ mr: 2 }}>{`${selectedUser.firstName} ${selectedUser.lastName}`}</Typography>
                 <Tooltip title="Accounts">
                     <IconButton
                         onClick={handleClick}
                         size="small"
-                        sx={{ ml: 2 }}
+                        sx={{
+                            ml: 2,
+                            color: userColors[selectedUser.id] || 'defaultColor', 
+                            '&:hover': { color: userColors[selectedUser.id] || 'defaultColor' },
+                        }}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar sx={{ width: 32, height: 32 }}>{user[0]}</Avatar>
+                        <Avatar sx={{ width: 32, height: 32, bgcolor: userColors[selectedUser.id] || 'defaultColor' }}>
+                            {selectedUser.firstName[0]}
+                        </Avatar>
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -55,7 +92,6 @@ export default function AccountMenu() {
                 id="account-menu"
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -86,24 +122,34 @@ export default function AccountMenu() {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 {users.map((user) => (
-                    <MenuItem key={user} onClick={() => selectUser(user)}>
-                        <Avatar>{user[0]}</Avatar> {user}
+                    <MenuItem key={user.id} onClick={() => selectUser(user)}>
+                        <Avatar sx={{ bgcolor: userColors[user.id] || 'defaultColor' }}>
+                            {user.firstName[0]}
+                        </Avatar>
+                        {`${user.firstName} ${user.lastName}`}
                     </MenuItem>
                 ))}
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={openAddUserDialog}>
                     <ListItemIcon>
                         <PersonAdd fontSize="small" />
                     </ListItemIcon>
                     Add another account
                 </MenuItem>
-                {loggedIn && <MenuItem onClick={handleLogout}>
-                    <ListItemIcon>
-                        <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem>}
+                {loggedIn && (
+                    <MenuItem onClick={handleLogout}>
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        Logout
+                    </MenuItem>
+                )}
             </Menu>
+            <AddUserDialog
+                open={isAddUserDialogOpen}
+                onClose={closeAddUserDialog}
+                onAddUser={handleAddUser}
+            />
         </React.Fragment>
     );
 }
