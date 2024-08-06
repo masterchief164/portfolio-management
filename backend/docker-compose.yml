@@ -1,6 +1,9 @@
 services:
   web:
     container_name: flask-backend
+    environment:
+      - FLASK_ENV=docker
+      - DEBUG=1
     build: .
     ports:
       - 8080:8000
