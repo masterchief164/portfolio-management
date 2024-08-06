@@ -48,10 +48,10 @@ const PerformanceCards = () => {
                 </>
             )}
             {!isSmUp && (
-              <div style={{margin: "auto"}}>
-                  <Card title="Total Investment" value="$1,473,980" />
-                  {/* <Card title="Current Value" value="$3,210,290" /> */}
-              </div>
+                <div style={{margin: "auto"}}>
+                    <Card title="Total Investment" value="$1,473,980" />
+                    {/* <Card title="Current Value" value="$3,210,290" /> */}
+                </div>
             )}
         </Box>
     );
