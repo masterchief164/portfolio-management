@@ -11,7 +11,6 @@ import {Chart as ChartJS, registerables} from 'chart.js';
 
 
 ChartJS.register(...registerables);
-// import { shadows } from '@mui/system';
 
 const options = {
     responsive: true,
@@ -25,8 +24,8 @@ const options = {
             beginAtZero: true,
         }
     },
-    aspectRatio: 3,
-    // maintainAspectRatio: false
+    // aspectRatio: 3,
+    maintainAspectRatio: false
 };
 
 const DashboardGraph = ({generateData}) => {
@@ -36,8 +35,8 @@ const DashboardGraph = ({generateData}) => {
         console.log(e.target.innerText);
     };
     return (
-        <div>
-            <Box style={{display: "flex", justifyContent: "space-between"}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', height: '100%'}}>
+            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Box padding="15px 0px 5px 15px">
                     <Typography variant='h6' fontWeight="400" padding="0px 0px 7px 0px">
                         Overall Performance
@@ -46,10 +45,10 @@ const DashboardGraph = ({generateData}) => {
                         $ 252,501
                     </Typography>
                     <Box>
-                        <Typography variant='h8' style={{backgroundColor: "#E1F6E1", marginLeft: "18px"}} color="#81C082">
+                        <Typography variant='h8' sx={{backgroundColor: "#E1F6E1", marginLeft: "18px"}} color="#81C082">
                             +230.82%
                         </Typography>
-                        <Typography variant='h12' paddingLeft="10px" fontFamily="xs" style={{opacity: "0.4"}}>
+                        <Typography variant='h12' paddingLeft="10px" fontFamily="xs" sx={{opacity: "0.4"}}>
                             from July 2021
                         </Typography>
                     </Box>
@@ -63,22 +62,22 @@ const DashboardGraph = ({generateData}) => {
                             <Button onClick={handleClick}>Daily</Button>
                         </ButtonGroup>
                     </Box>
-                    <Box style={{paddingRight: "20px"}}>
+                    <Box sx={{paddingRight: "20px"}}>
                         <AvatarGroup>
                             <Avatar alt="Remy Sharp" src={appleLogo} />
                             <Avatar alt="Travis Howard" src={googleLogo}  />
                             <Avatar alt="Agnes Walker" src={bmwLogo} />
-                            {/* <Avatar alt="Trevor Henderson" src={appleLogo} /> */}
                         </AvatarGroup>
                     </Box>
                 </Box>
             </Box>
 
-            <Box style={{padding: "10px 2px", width: "100%"}}>
+            <Box sx={{padding: "10px 2px", flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Line data={data} options={options} />
             </Box>
-        </div>
+        </Box>
     );
+
 };
 
 export default DashboardGraph;
