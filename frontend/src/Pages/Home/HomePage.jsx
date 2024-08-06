@@ -1,8 +1,7 @@
 import Box from "@mui/material/Box";
-import AssetRow from "../../Components/AssetRow.jsx";
 import DashboardPerformance from "../../Components/DashboardPerformance.jsx";
 import AssetAllocationTable from "../../Components/AssetAllocationTable.jsx";
-import { Container, Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import WatchlistTable from "../../Components/WatchList.jsx";
 
 const assetData = [
@@ -40,7 +39,8 @@ const watchlistData = [
   
 const HomePage = () => {
     return (
-      <Container>
+      // <Container>
+      <div>
       <Grid>
       <Box sx={{overflowY: 'hidden', backgroundColor: "#F4F7FF", marginTop: "-42px", marginLeft: "-10px", marginRight: "-8px"}}>
             <DashboardPerformance></DashboardPerformance>
@@ -69,7 +69,8 @@ const HomePage = () => {
             
           </Grid>
         </Grid>
-</Container>
+{/* </Container> */}
+</div>
     );
 };
 
