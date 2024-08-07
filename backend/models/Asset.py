@@ -2,11 +2,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Asset:
-    __asset_id: int
-    __symbol: str
-    __sector: str
-    __asset_type: str
 
-
-
-
+    asset_id: int
+    symbol: str
+    sector: str
+    asset_type: str
