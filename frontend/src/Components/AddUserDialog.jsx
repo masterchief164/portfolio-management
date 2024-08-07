@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     Dialog,
     DialogActions,
@@ -7,8 +8,10 @@ import {
     TextField,
     Button,
 } from '@mui/material';
+import { addUser } from '../features/user/userSlice';
 
-export default function AddUserDialog({ open, onClose, onAddUser }) {
+export default function AddUserDialog({ open, onClose }) {
+    const dispatch = useDispatch();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [age, setAge] = useState('');
@@ -16,11 +19,12 @@ export default function AddUserDialog({ open, onClose, onAddUser }) {
 
     const handleAddUser = () => {
         if (firstName && lastName && age && address) {
-            onAddUser({ firstName, lastName, age, address });
+            dispatch(addUser({ firstName, lastName, age, address }));
             setFirstName('');
             setLastName('');
             setAge('');
             setAddress('');
+            onClose();
         }
     };
 
@@ -43,7 +47,7 @@ export default function AddUserDialog({ open, onClose, onAddUser }) {
                     variant="standard"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    onKeyDown={handleKeyDown} 
+                    onKeyDown={handleKeyDown}
                 />
                 <TextField
                     margin="dense"
@@ -53,7 +57,7 @@ export default function AddUserDialog({ open, onClose, onAddUser }) {
                     variant="standard"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    onKeyDown={handleKeyDown} 
+                    onKeyDown={handleKeyDown}
                 />
                 <TextField
                     margin="dense"
@@ -63,7 +67,7 @@ export default function AddUserDialog({ open, onClose, onAddUser }) {
                     variant="standard"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
-                    onKeyDown={handleKeyDown} 
+                    onKeyDown={handleKeyDown}
                 />
                 <TextField
                     margin="dense"
@@ -73,7 +77,7 @@ export default function AddUserDialog({ open, onClose, onAddUser }) {
                     variant="standard"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    onKeyDown={handleKeyDown} 
+                    onKeyDown={handleKeyDown}
                 />
             </DialogContent>
             <DialogActions>
@@ -83,7 +87,7 @@ export default function AddUserDialog({ open, onClose, onAddUser }) {
                 <Button
                     onClick={handleAddUser}
                     color="primary"
-                    variant="contained" 
+                    variant="contained"
                     sx={{ margin: 1 }}
                 >
                     Add
