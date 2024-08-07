@@ -195,7 +195,7 @@ const top100Films = [
 const AssetTopbar = ({period, handleChange, handleStock, stock, mode, handleMode}) => {
 
     return (
-        <div style={{display: "flex", borderBottom: "3px solid black", paddingBottom: "15px", marginTop: "-20px", marginBottom: "10px", justifyContent: "space-between"}}>
+        <div style={{display: "flex", borderBottom: "2px solid black", paddingBottom: "15px", paddingTop: "10px", marginBottom: "10px", justifyContent: "space-between"}}>
             <div style={{display: "flex", justifyContent: "space-between"}}>
                 <Stack spacing={2} size="small" sx={{ width: 300}}>
                     <Autocomplete
