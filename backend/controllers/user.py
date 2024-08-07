@@ -4,7 +4,7 @@ from config.config import app
 from services import user_service
 
 
-@app.route('/user', methods=['GET', 'POST'])
+@app.route('/users', methods=['GET', 'POST'])
 def user():
     if request.method == 'GET':
         try:
@@ -13,4 +13,9 @@ def user():
             print(e)
             return 'error'
     else:
-        return 'watchlist'
+        try:
+            print(request.json)
+            return user_service.add_user(request.json)
+        except Exception as e:
+            print(e)
+            return 'error'
