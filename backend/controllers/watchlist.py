@@ -1,5 +1,4 @@
 from flask import request
-
 from config.config import app
 from services import watchlist_service
 
