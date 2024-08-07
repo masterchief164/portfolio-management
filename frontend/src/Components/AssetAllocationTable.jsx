@@ -4,13 +4,16 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
   return (a, b) => {
+    // Handling string columns (name and symbol)
     if (orderBy === 'name' || orderBy === 'symbol') {
-      return (order === 'asc' ? a[orderBy].localeCompare(b[orderBy]) : b[orderBy].localeCompare(a[orderBy]));
+      return (order === 'asc'
+        ? a[orderBy].localeCompare(b[orderBy])
+        : b[orderBy].localeCompare(a[orderBy]));
     }
 
-    // Convert values to numbers for numeric columns
-    const aValue = parseFloat(a[orderBy].replace(/[^0-9.-]/g, ''));
-    const bValue = parseFloat(b[orderBy].replace(/[^0-9.-]/g, ''));
+    // Handling numeric columns
+    const aValue = typeof a[orderBy] === 'string' ? parseFloat(a[orderBy].replace(/[^0-9.-]/g, '')) || 0 : a[orderBy];
+    const bValue = typeof b[orderBy] === 'string' ? parseFloat(b[orderBy].replace(/[^0-9.-]/g, '')) || 0 : b[orderBy];
 
     return (order === 'asc' ? aValue - bValue : bValue - aValue);
   };
