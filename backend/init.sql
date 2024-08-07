@@ -8,7 +8,6 @@ CREATE TABLE users(
 
 
 CREATE TABLE assets(
-	asset_id SERIAL PRIMARY KEY,
 	symbol VARCHAR(50),
 	sector VARCHAR(50),
 	asset_type VARCHAR(50)
@@ -20,18 +19,17 @@ CREATE TABLE transactions(
 	tx_id SERIAL PRIMARY KEY,
 	pm_id INT,
 	user_id INT,
-	asset_id INT,
+    asset_symbol VARCHAR(50),
 	quantity INT,
 	price_per_unit DOUBLE PRECISION,
 	tx_type transac_type,
 	created_at TIMESTAMP,
 	CONSTRAINT fk_pm FOREIGN KEY(pm_id) REFERENCES users(user_id),
 	CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id),
-	CONSTRAINT fk_asset FOREIGN KEY(asset_id) REFERENCES assets(asset_id)
+    CONSTRAINT fk_asset FOREIGN KEY (asset_symbol) REFERENCES assets (symbol)
 );
 
 CREATE TABLE pm_client_relationships (
-	relation_id SERIAL PRIMARY KEY,
 	pm_id INT,
 	user_id INT,
 	created_at TIMESTAMP,
@@ -42,10 +40,10 @@ CREATE TABLE pm_client_relationships (
 CREATE TABLE watchlist(
 	watchlist_id SERIAL PRIMARY KEY,
 	user_id INT,
-	asset_id INT,
+    asset_symbol VARCHAR(50),
 	price_per_unit DOUBLE PRECISION,
 	created_at TIMESTAMP,
 	CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id),
-	CONSTRAINT fk_asset FOREIGN KEY(asset_id) REFERENCES assets(asset_id)
+    CONSTRAINT fk_asset FOREIGN KEY (asset_symbol) REFERENCES assets (symbol)
 );
 

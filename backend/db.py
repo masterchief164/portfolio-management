@@ -28,12 +28,11 @@ class Database:
         cursor.close()
         self.pool.putconn(cursor.connection)
 
-    def execute_query(self, query, params=None):
-        print('executing query')
-        print(query)
-
-        cursor = self.get_cursor()
-        cursor.execute(query, params)
-        result = cursor.fetchall()
-        self.put_cursor(cursor)
-        return result
+    def insert_into_table(self, query, data):
+        conn = self.pool.getconn()
+        cursor = conn.cursor()
+        cursor.executemany(query, data)
+        conn.commit()
+        cursor.close()
+        self.pool.putconn(conn)
+        return 'success'
