@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box } from '@mui/material';
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  TableSortLabel, Paper, TextField, Typography, Box, Button
+} from '@mui/material';
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
   return (a, b) => {
-    // Handling string columns (name and symbol)
     if (orderBy === 'name' || orderBy === 'symbol') {
       return (order === 'asc'
         ? a[orderBy].localeCompare(b[orderBy])
         : b[orderBy].localeCompare(a[orderBy]));
     }
 
-    // Handling numeric columns
     const aValue = typeof a[orderBy] === 'string' ? parseFloat(a[orderBy].replace(/[^0-9.-]/g, '')) || 0 : a[orderBy];
     const bValue = typeof b[orderBy] === 'string' ? parseFloat(b[orderBy].replace(/[^0-9.-]/g, '')) || 0 : b[orderBy];
 
@@ -19,11 +20,10 @@ const getComparator = (order, orderBy) => {
   };
 };
 
-const AssetAllocationTable = ({ data }) => {
+const AssetTable = ({ data }) => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
   const [searchQuery, setSearchQuery] = useState('');
-
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -34,7 +34,16 @@ const AssetAllocationTable = ({ data }) => {
     setSearchQuery(event.target.value);
   };
 
-  // Filter data based on search query
+  const handleTransaction = (asset, type) => {
+    if (type === 'buy') {
+      // Handle buy logic here
+      console.log(`Buying ${asset.name}`);
+    } else {
+      // Handle sell logic here
+      console.log(`Selling ${asset.name}`);
+    }
+  };
+
   const filteredData = data.filter(row =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     row.symbol.toLowerCase().includes(searchQuery.toLowerCase())
@@ -44,7 +53,7 @@ const AssetAllocationTable = ({ data }) => {
     <div style={{ height: '100%' }}>
       <Box display="flex" alignItems="center" mb={2}>
         <Typography variant="h6" style={{ flexShrink: 0, marginRight: '16px' }}>
-          Asset Allocation
+          Asset Table
         </Typography>
         <TextField
           label="Search"
@@ -94,24 +103,7 @@ const AssetAllocationTable = ({ data }) => {
                   Quantity
                 </TableSortLabel>
               </TableCell>
-              <TableCell align="right">
-                <TableSortLabel
-                  active={orderBy === 'totalValueHeld'}
-                  direction={orderBy === 'totalValueHeld' ? order : 'asc'}
-                  onClick={() => handleRequestSort('totalValueHeld')}
-                >
-                  Total Value Held
-                </TableSortLabel>
-              </TableCell>
-              <TableCell align="right">
-                <TableSortLabel
-                  active={orderBy === 'percentageOfAllocation'}
-                  direction={orderBy === 'percentageOfAllocation' ? order : 'asc'}
-                  onClick={() => handleRequestSort('percentageOfAllocation')}
-                >
-                  Percentage of Allocation
-                </TableSortLabel>
-              </TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -121,8 +113,28 @@ const AssetAllocationTable = ({ data }) => {
                 <TableCell>{row.symbol}</TableCell>
                 <TableCell align="right">{row.price}</TableCell>
                 <TableCell align="right">{row.quantity}</TableCell>
-                <TableCell align="right">{row.totalValueHeld}</TableCell>
-                <TableCell align="right">{row.percentageOfAllocation}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleTransaction(row, 'buy')}
+                    style={{ marginRight: '8px' }}
+                  >
+                    Buy
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleTransaction(row, 'sell')}
+                    disabled={row.quantity <= 0}
+                    style={{
+                      opacity: row.quantity <= 0 ? 0.5 : 1,
+                      transition: 'opacity 0.3s ease'
+                    }}
+                  >
+                    Sell
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -132,4 +144,4 @@ const AssetAllocationTable = ({ data }) => {
   );
 };
 
-export default AssetAllocationTable;
+export default AssetTable;
