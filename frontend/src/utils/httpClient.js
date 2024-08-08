@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getKlinesPerDay = async (from, company) => {
+export const getKlinesPerDay = async (from, company = "") => {
     if (company === "") company = "AAPL";
     console.log(
         `https://financialmodelingprep.com/api/v3/historical-price-full/${company}?from=${from}&apikey=${
@@ -11,7 +11,7 @@ export const getKlinesPerDay = async (from, company) => {
     let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url: `https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?from=${from}&apikey=${
+        url: `https://financialmodelingprep.com/api/v3/historical-price-full/${company}?from=${from}&apikey=${
             import.meta.env.VITE_FIN_MOD_API_KEY
         }`,
         headers: {},
@@ -34,4 +34,19 @@ export const getKlinesPerDay = async (from, company) => {
     return data.sort((x, y) =>
         new Date(x.date).valueOf() < new Date(y.date).valueOf() ? -1 : 1
     );
+};
+
+export const getStockInfo = async (stock = "") => {
+    if (stock === "") stock = "AAPL";
+    let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `https://financialmodelingprep.com/api/v3/quote-order/${stock}?apikey=${
+            import.meta.env.VITE_FIN_MOD_API_KEY
+        }`,
+        headers: {},
+    };
+
+    const response = await axios.request(config);
+    return response.data;
 };
