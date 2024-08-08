@@ -5,20 +5,22 @@ const StockRangeSlider = ({label, min, max, currValue}) => {
         {
             value: min,
             label: 'L',
+            color: "#FFFFFF"
         },
         {
             value: max,
             label: 'H',
+            color: "#FFFFFF"
         },
     ];
     return (
         <Box sx={{marginTop: "20px"}}>
-            <Typography variant='h6'> {label} </Typography>
+            <Typography variant='h6' color= "#FFFFFF"> {label} </Typography>
             <Box sx={{display: "flex", justifyContent: "space-between", marginTop: "10px"}}>
-                <Typography> {min} </Typography>
-                <Typography> {max} </Typography>
+                <Typography color= "#FFFFFF"> {min} </Typography>
+                <Typography color= "#FFFFFF"> {max} </Typography>
             </Box>
-            <Slider disabled defaultValue={currValue} marks={data} min={min} max={max} step={1} />
+            <Slider disabled value={currValue} marks={data} min={min} max={max} step={1} />
         </Box>
     );
 };

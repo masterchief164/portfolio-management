@@ -19,3 +19,14 @@ def get_all_assets():
     pool.put_cursor(cursor)  # Put the connection object back to the pool
     assets = [Asset(**asset) for asset in assets]
     return assets
+
+def get_asset_by_sector(sector):
+    pool = Database()
+    cursor = pool.get_cursor()
+    query = 'SELECT * FROM assets WHERE sector = %s'
+    params = (sector,)
+    cursor.execute(query, params)
+    assets = cursor.fetchall()
+    pool.put_cursor(cursor)
+    assets = [Asset(**asset) for asset in assets]
+    return assets

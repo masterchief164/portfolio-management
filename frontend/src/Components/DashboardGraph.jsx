@@ -7,6 +7,7 @@ import appleLogo from "../assets/apple.png";
 import googleLogo from "../assets/google.png";
 import bmwLogo from "../assets/bmw.jpeg";
 import { Line } from "react-chartjs-2";
+import { useSelector } from "react-redux";
 import {Chart as ChartJS, registerables} from 'chart.js';
 
 
@@ -30,7 +31,9 @@ const options = {
 
 const DashboardGraph = ({generateData}) => {
     const data = generateData();
+    const user = useSelector((store) => store.user.selectedUser);
 
+    console.log(user);
     const handleClick = (e) => {
         console.log(e.target.innerText);
     };

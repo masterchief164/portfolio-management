@@ -42,8 +42,8 @@ const AssetSidebar = ({stock}) => {
 
     return (
     <Box sx={{padding: "2% 4%", height: "96%", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-        <Typography variant='h5' fontWeight="500" sx={{marginBottom: "4px"}}> {name} </Typography>
-        <Typography variant='h3' fontWeight="400"> ${price} </Typography>
+        <Typography variant='h5' fontWeight="500" sx={{marginBottom: "4px"}} color= "#FFFFFF"> {name} </Typography>
+        <Typography variant='h3' fontWeight="400" color= "#FFFFFF"> ${price} </Typography>
         <Typography variant='h5' color={changeColor} sx={{ paddingLeft: "10px" }}> {changeNumber > 0 ? `+${change}` : change} ({formattedPercentage}%) </Typography>
 
         <StockRangeSlider label={"Day Range"} min={dayLow} max={dayHigh} currValue={price}/>
@@ -51,12 +51,12 @@ const AssetSidebar = ({stock}) => {
 
         <Box sx={{display: "flex", justifyContent: "space-between",marginTop: "25px"}}>
             <Box> 
-                <Typography variant='h6'> Volume </Typography>
-                <Typography variant='h6'> {volume} </Typography>
+                <Typography variant='h6' color= "#FFFFFF"> Volume </Typography>
+                <Typography variant='h6' color= "#FFFFFF"> {volume} </Typography>
             </Box>
             <Box>
-                <Typography variant='h6' > Bid/Ask </Typography>
-                <Typography variant='h6'> {priceAvg50} </Typography>
+                <Typography variant='h6'color= "#FFFFFF" > Bid/Ask </Typography>
+                <Typography variant='h6' color= "#FFFFFF"> {priceAvg50} </Typography>
             </Box>
         </Box>
     </Box>

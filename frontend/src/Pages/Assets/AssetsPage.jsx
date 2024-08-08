@@ -26,19 +26,17 @@ const AssetsPage = () => {
             setMode("light");
     };
 
-    // console.log(stock);
-    // console.log(companies.find((c) => c.name=== "MicroStrategy Incorporated")?.symbol)
     const theme = useTheme();
-    const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'));
+    const isLargeScreen = useMediaQuery(theme.breakpoints.down('lg'));
     return (
         <div style={{marginTop: "-35px"}}>
-            <Box sx={{ display: "flex", flexDirection: isMediumScreen ? "column" : "row",gap: "20px", justifyContent: "space-between", padding: "20px 10px 20px 20px"}}>
-                {!isMediumScreen && (
-                    <Box sx={{ width: "30%" }}>
+            <Box sx={{ display: "flex", flexDirection: isLargeScreen ? "column" : "row",gap: "20px", justifyContent: "space-between", padding: "20px 10px 20px 20px"}}>
+                {!isLargeScreen && (
+                    <Box sx={{ width: "30%",  backgroundColor: "#414a4c"}}>
                         <AssetSidebar stock={companies.find((c) => c.name===stock)?.symbol}/>
                     </Box>
                 )}
-                <Box sx={{ width: isMediumScreen ? "100%" : "70%" }}>
+                <Box sx={{ width: isLargeScreen ? "100%" : "70%" }}>
                     <AssetTopbar 
                         period={period} 
                         stock={stock} 

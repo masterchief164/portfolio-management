@@ -5,8 +5,8 @@ from dataclasses import dataclass
 class User:
 
 
-    # user_id: int
+    user_id: int
     fname: str
     lname: str
-    # age: str
-    # ispm: str
+    age: str
+    ispm: str
