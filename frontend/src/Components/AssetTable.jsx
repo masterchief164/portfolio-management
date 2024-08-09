@@ -3,6 +3,8 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   TableSortLabel, Paper, TextField, Typography, Box, Button
 } from '@mui/material';
+import BuyPopup from './BuyPopup';
+import SellPopup from './SellPopup';
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -24,6 +26,10 @@ const AssetTable = ({ data }) => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [isBuyPopupOpen, setBuyPopupOpen] = useState(false);
+  const [isSellPopupOpen, setSellPopupOpen] = useState(false);
+
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -34,15 +40,29 @@ const AssetTable = ({ data }) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleTransaction = (asset, type) => {
-    if (type === 'buy') {
-      // Handle buy logic here
-      console.log(`Buying ${asset.name}`);
-    } else {
-      // Handle sell logic here
-      console.log(`Selling ${asset.name}`);
-    }
+  const handleOpenBuyPopup = (asset) => {
+    setSelectedAsset(asset);
+    setBuyPopupOpen(true);
   };
+
+  const handleOpenSellPopup = (asset) => {
+    setSelectedAsset(asset);
+    setSellPopupOpen(true);
+  };
+
+  const handleClosePopups = () => {
+    setBuyPopupOpen(false);
+    setSellPopupOpen(false);
+  };
+  // const handleTransaction = (asset, type) => {
+  //   if (type === 'buy') {
+  //     // Handle buy logic here
+  //     console.log(`Buying ${asset.name}`);
+  //   } else {
+  //     // Handle sell logic here
+  //     console.log(`Selling ${asset.name}`);
+  //   }
+  // };
 
   const filteredData = data.filter(row =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -117,7 +137,7 @@ const AssetTable = ({ data }) => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleTransaction(row, 'buy')}
+                    onClick={() => handleOpenBuyPopup(row)}
                     style={{ marginRight: '8px' }}
                   >
                     Buy
@@ -125,7 +145,7 @@ const AssetTable = ({ data }) => {
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => handleTransaction(row, 'sell')}
+                    onClick={() => handleOpenSellPopup(row)}
                     disabled={row.quantity <= 0}
                     style={{
                       opacity: row.quantity <= 0 ? 0.5 : 1,
@@ -140,6 +160,12 @@ const AssetTable = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {selectedAsset && (
+        <>
+          <BuyPopup asset={selectedAsset} open={isBuyPopupOpen} onClose={handleClosePopups} />
+          <SellPopup asset={selectedAsset} open={isSellPopupOpen} onClose={handleClosePopups} />
+        </>
+      )}
     </div>
   );
 };
