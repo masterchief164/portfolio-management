@@ -31,7 +31,7 @@ def get_user_transactions(user_id):
 
 
 @app.route('/transactions/pm/<pm_id>', methods=['GET'])
-def get_pm_transcations(pm_id):
+def get_pm_transactions(pm_id):
     try:
         return transaction_service.get_pm_transactions(pm_id)
     except Exception as e:

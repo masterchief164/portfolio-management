@@ -11,3 +11,4 @@ class Transaction:
     price_per_unit: float
     tx_type: str
     value: float
+    created_at: str
