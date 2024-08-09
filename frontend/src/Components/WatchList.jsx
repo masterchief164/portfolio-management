@@ -5,14 +5,24 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table
 const getComparator = (order, orderBy) => {
   return (a, b) => {
     if (orderBy === 'User_name' || orderBy === 'Asset_name') {
-      return (order === 'asc' ? a[orderBy].localeCompare(b[orderBy]) : b[orderBy].localeCompare(a[orderBy]));
+      // String comparison
+      return (order === 'asc'
+        ? a[orderBy].localeCompare(b[orderBy])
+        : b[orderBy].localeCompare(a[orderBy]));
     }
-
-    // Convert values to numbers for numeric columns
-    const aValue = parseFloat(a[orderBy].replace(/[^0-9.-]/g, ''));
-    const bValue = parseFloat(b[orderBy].replace(/[^0-9.-]/g, ''));
-
-    return (order === 'asc' ? aValue - bValue : bValue - aValue);
+    if (orderBy === 'Price_per_unit') {
+      // Numeric comparison
+      const aValue = parseFloat(a[orderBy].replace(/[^0-9.-]/g, '')) || 0;
+      const bValue = parseFloat(b[orderBy].replace(/[^0-9.-]/g, '')) || 0;
+      return (order === 'asc' ? aValue - bValue : bValue - aValue);
+    }
+    if (orderBy === 'Timestamp') {
+      // Date comparison
+      const aDate = new Date(a[orderBy]);
+      const bDate = new Date(b[orderBy]);
+      return (order === 'asc' ? aDate - bDate : bDate - aDate);
+    }
+    return 0; // Default case
   };
 };
 
