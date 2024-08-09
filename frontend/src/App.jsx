@@ -5,9 +5,7 @@ import HomePage from "./Pages/Home/HomePage.jsx";
 import AboutPage from "./Pages/About/AboutPage.jsx";
 import AssetsPage from "./Pages/Assets/AssetsPage.jsx";
 import Box from "@mui/material/Box";
-
 function App() {
-
   return (
     <>
         <BrowserRouter>

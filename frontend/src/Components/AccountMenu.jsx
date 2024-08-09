@@ -1,5 +1,5 @@
 // /src/components/AccountMenu.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
@@ -16,12 +16,23 @@ import Logout from '@mui/icons-material/Logout';
 import AddUserDialog from './AddUserDialog';
 import { setSelectedUser } from '../features/user/userSlice';
 import { selectSelectedUser } from '../features/user/userSelectors';
+import { get_users } from '../utils/user_utils';
+import randomColor from 'randomcolor';
 
 export default function AccountMenu() {
   const dispatch = useDispatch();
   const selectedUser = useSelector(selectSelectedUser);
+  const [users,setUsers] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAddUserDialogOpen, setAddUserDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const getUsers = async() => {
+      const data = await get_users();
+      setUsers(data);
+    };
+    getUsers();
+  }, [selectedUser]);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -33,20 +44,24 @@ export default function AccountMenu() {
   const handleLogout = () => {
     setAnchorEl(null);
   };
-//   const selectUser = (user) => {
-//     dispatch(setSelectedUser(user));
-//     handleClose();
-//   };
-  const handleAddUser = (newUser) => {
-    dispatch(setSelectedUser(newUser));
-    setAddUserDialogOpen(false);
-  };
+
   const openAddUserDialog = () => {
     setAddUserDialogOpen(true);
-    handleClose();
+    setAnchorEl(null);
   };
   const closeAddUserDialog = () => {
     setAddUserDialogOpen(false);
+  };
+
+  const selectUser = (val) => {
+    console.log(val);
+    const newVal = {
+      id: val.user_id,
+      firstName: val.fname,
+      lastName: val.lname,
+      color: randomColor(),
+    };
+    dispatch(setSelectedUser(newVal));
   };
 
   return (
@@ -77,6 +92,7 @@ export default function AccountMenu() {
         id="account-menu"
         open={open}
         onClose={handleClose}
+        disableScrollLock={false}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -106,6 +122,13 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        {users.map((user) => (
+                    <MenuItem key={user.user_id} value={user} onClick={() => selectUser(user)}>
+                        <Avatar>{user.fname ? user.fname[0] : '?'}</Avatar> {user.fname} {user.lname}
+                    </MenuItem>
+                ))
+        }
+        
         <MenuItem onClick={openAddUserDialog}>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
@@ -122,7 +145,6 @@ export default function AccountMenu() {
       <AddUserDialog
         open={isAddUserDialogOpen}
         onClose={closeAddUserDialog}
-        onAddUser={handleAddUser}
       />
     </React.Fragment>
   );

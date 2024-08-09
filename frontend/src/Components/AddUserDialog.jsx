@@ -1,6 +1,6 @@
 // /src/components/AddUserDialog.jsx
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import {
   Dialog,
   DialogActions,
@@ -9,17 +9,17 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import { setSelectedUser } from '../features/user/userSlice';
 import randomColor from 'randomcolor';
+import { add_user, get_users } from '../utils/user_utils';
 
 export default function AddUserDialog({ open, onClose }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');
   const [address, setAddress] = useState('');
-
-  const handleAddUser = () => {
+  
+  const handleAddUser = async() => {
     if (firstName && lastName && age && address) {
       const newUser = {
         id: Math.random().toString(36).substr(2, 9), // Generate a random id
@@ -29,7 +29,11 @@ export default function AddUserDialog({ open, onClose }) {
         address,
         color: randomColor(),
       };
-      dispatch(setSelectedUser(newUser));
+      // console.log("Adding user");
+      await add_user(newUser);
+      await get_users();
+      // console.log("");
+      // dispatch(setSelectedUser(newUser));
       setFirstName('');
       setLastName('');
       setAge('');
