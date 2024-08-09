@@ -16,7 +16,26 @@ def get_user_holdings(user_id, txn_type):
 def get_total_user_holdings(user_id):
     sale_holdings = [Holding(**holding) for holding in get_user_holdings(user_id, 'sell')]
     buy_holdings = [Holding(**holding) for holding in get_user_holdings(user_id, 'buy')]
-    print(sale_holdings, buy_holdings)
+    return calculate_net_holdings(buy_holdings, sale_holdings)
+
+
+def get_pm_holdings(pm_id, txn_type):
+    db = Database()
+    cursor = db.get_cursor()
+    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value from transactions where'
+                   ' pm_id = %s and tx_type = %s group by asset_symbol order by asset_symbol;', (pm_id, txn_type))
+    sale_holdings = cursor.fetchall()
+    db.put_cursor(cursor)
+    return sale_holdings
+
+
+def get_total_pm_holdings(pm_id):
+    sale_holdings = [Holding(**holding) for holding in get_pm_holdings(pm_id, 'sell')]
+    buy_holdings = [Holding(**holding) for holding in get_pm_holdings(pm_id, 'buy')]
+    return calculate_net_holdings(buy_holdings, sale_holdings)
+
+
+def calculate_net_holdings(buy_holdings, sale_holdings):
     total_holdings = []
     min_idx = min(len(sale_holdings), len(buy_holdings))
     sale_idx = 0
@@ -53,3 +72,47 @@ def get_total_user_holdings(user_id):
     for i in range(len(total_holdings)):
         total_holdings[i].value = total_holdings[i].quantity * stocks_data[i]['price']
     return total_holdings
+
+
+def get_user_invested_value(user_id):
+    db = Database()
+    cursor = db.get_cursor()
+    cursor.execute('select sum(value) as value from transactions where user_id = %s and tx_type = %s;',
+                   (user_id, 'buy'))
+    invested_value = cursor.fetchone()
+    cursor.execute('select sum(value) as value from transactions where user_id = %s and tx_type = %s;',
+                   (user_id, 'sell'))
+    sold_value = cursor.fetchone()
+    if invested_value and sold_value:
+        invested_value = invested_value['value'] - sold_value['value']
+    else:
+        invested_value = 0
+    db.put_cursor(cursor)
+    return invested_value
+
+
+def get_user_current_value(user_id):
+    total_holdings = get_total_user_holdings(user_id)
+    return sum([holding.value for holding in total_holdings])
+
+
+def get_pm_invested_value(pm_id):
+    db = Database()
+    cursor = db.get_cursor()
+    cursor.execute('select sum(value) as value from transactions where pm_id = %s and tx_type = %s;',
+                   (pm_id, 'buy'))
+    invested_value = cursor.fetchone()
+    cursor.execute('select sum(value) as value from transactions where pm_id = %s and tx_type = %s;',
+                   (pm_id, 'sell'))
+    sold_value = cursor.fetchone()
+    if invested_value and sold_value:
+        invested_value = invested_value['value'] - sold_value['value']
+    else:
+        invested_value = 0
+    db.put_cursor(cursor)
+    return invested_value
+
+
+def get_pm_current_value(pm_id):
+    total_holdings = get_total_pm_holdings(pm_id)
+    return sum([holding.value for holding in total_holdings])
