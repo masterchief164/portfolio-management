@@ -13,12 +13,13 @@ def get_transactions(user_id: int):
         return Transaction(**transaction_data)
     return None
 
-def get_all_transactions():
+def get_all_transactions() -> List[Transaction]:
     pool = Database()
     cursor = pool.get_cursor()
     cursor.execute('SELECT * FROM transactions')
     transactions_data = cursor.fetchall()
     pool.put_cursor(cursor)
+
     return [Transaction(**tx) for tx in transactions_data]
 
 def add_transaction(transactions):
