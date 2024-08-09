@@ -1,4 +1,10 @@
 import { Container, Typography, Card, CardContent, CardMedia, Grid, Box } from '@mui/material';
+import News1 from "../../assets/News1.jpeg";
+import News2 from "../../assets/News2.jpg";
+import News3 from "../../assets/News3.jpeg";
+import Service1 from "../../assets/Service1.jpg";
+import Service2 from "../../assets/Service2.webp";
+import Service3 from "../../assets/Service3.jpeg";
 
 const AboutPage = () => {
   const newsHeadlines = [
@@ -6,19 +12,19 @@ const AboutPage = () => {
       title: "Stock Market Hits Record High",
       description: "The stock market reached an all-time high today, driven by strong corporate earnings and economic growth.",
       date: "August 6, 2024",
-      image: "/src/assets/News1.jpeg",
+      image: News1,
     },
     {
       title: "Federal Reserve Announces Interest Rate Cut",
       description: "The Federal Reserve has announced a reduction in interest rates to stimulate economic activity amidst global uncertainties.",
       date: "August 5, 2024",
-      image: "/src/assets/News2.jpg",
+      image: News2,
     },
     {
       title: "Top Investment Strategies for 2024",
       description: "Experts share their insights on the most effective investment strategies for the upcoming year, focusing on diversification and risk management.",
       date: "August 4, 2024",
-      image: "/src/assets/News3.jpeg",
+      image: News3,
     },
   ];
 
@@ -41,7 +47,7 @@ const AboutPage = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="/src/assets/Service1.jpg"
+                image={Service1}
                 alt="Service 1"
               />
               <CardContent>
@@ -61,7 +67,7 @@ const AboutPage = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="/src/assets/Service2.webp"
+                image={Service2}
                 alt="Service 2"
               />
               <CardContent>
@@ -81,7 +87,7 @@ const AboutPage = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image="/src/assets/Service3.jpeg"
+                image={Service3}
                 alt="Service 3"
               />
               <CardContent>
