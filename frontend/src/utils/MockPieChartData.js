@@ -1,4 +1,4 @@
-export const data = {
+export const pieData = {
     labels: ["Big Tech", "Stocks", "Energy", "Ecommerce", "Funds"],
     datasets: [
         {

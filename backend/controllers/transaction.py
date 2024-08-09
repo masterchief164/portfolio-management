@@ -13,7 +13,7 @@ def transactions():
             return 'error'
     else:
         try:
-            print(request.json)
+            # print(request.json)
             # demoData=[{pm_id: 1, user_id: 1, asset_symbol: 'DEMO', quantity: 10, price_per_unit: 100, tx_type: 'buy', created_at: '2021-09-01 00:00:00'}]
             return transaction_service.add_transaction(request.json)
         except Exception as e:

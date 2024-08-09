@@ -85,7 +85,7 @@ const AssetsPage = () => {
                 </Box>
             </Box>
 
-            <div>
+            <div style={{padding: "20px"}}>
                 <AssetTable data={demoData}/>
             </div>
         </div>

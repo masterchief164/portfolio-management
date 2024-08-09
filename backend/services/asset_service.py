@@ -30,3 +30,27 @@ def get_asset_by_sector(sector):
     pool.put_cursor(cursor)
     assets = [Asset(**asset) for asset in assets]
     return assets
+
+
+def get_asset_by_name(name):
+    pool = Database()
+    cursor = pool.get_cursor()
+    query = 'SELECT * FROM assets WHERE name = %s'
+    params = (name,)
+    cursor.execute(query, params)
+    assets = cursor.fetchall()
+    pool.put_cursor(cursor)
+    assets = [Asset(**asset) for asset in assets]
+    return assets
+
+
+def get_asset_by_symbol(symbol):
+    pool = Database()
+    cursor = pool.get_cursor()
+    query = 'SELECT * FROM assets WHERE symbol = %s'
+    params = (symbol,)
+    cursor.execute(query, params)
+    assets = cursor.fetchall()
+    pool.put_cursor(cursor)
+    assets = [Asset(**asset) for asset in assets]
+    return assets
