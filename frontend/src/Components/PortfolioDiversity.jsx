@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const PortfolioDiversity = () => {
-    const [data, setData] = useState(pieData)
+    const [data, setData] = useState(pieData);
     useEffect(() => {
         const getData = async () => {
             let res = await axios.get('http://localhost:8000/user_assets/3');
@@ -24,10 +24,10 @@ const PortfolioDiversity = () => {
                         borderWidth: 1,
                     },
                 ],
-            })
-        }
+            });
+        };
         getData();
-    }, [])
+    }, []);
 
     const options = {
         responsive: true,
