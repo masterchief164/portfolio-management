@@ -17,4 +17,4 @@ def add_user(users):
     query = 'INSERT INTO users (fname, lname, age, ispm) VALUES (%s, %s, %s, %s)'
     users_tuple = [(user['fname'], user['lname'], user['age'], user['ispm']) for user in users]
     status = db.insert_into_table(query, users_tuple)
-    return 'success'
+    return status
