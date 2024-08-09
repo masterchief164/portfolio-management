@@ -1,6 +1,8 @@
-from flask import request, jsonify
+from flask import request
+
 from config.config import app
 from services import asset_service
+
 
 @app.route('/assets', methods=["GET", "POST"])
 def assets():
@@ -10,6 +12,7 @@ def assets():
             print(data)
             return asset_service.add_assets(data)
         except Exception as e:
+            print(e)
             return "error"
     else:
         try:
@@ -27,6 +30,5 @@ def assets():
             else:
                 return asset_service.get_all_assets()
         except Exception as e:
+            print(e)
             return 'error'
-
-# Select asset_symbol  from transactions as t INNER JOIN assets as a ON a.symbol = t.asset_symbol where user_id = 1 group by asset_symbol

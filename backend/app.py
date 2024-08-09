@@ -1,6 +1,6 @@
 from config.config import app
 from db import Database
-from controllers import index, user, watchlist, asset_controller, transaction, user_asset_controller
+from controllers import transaction, balance, asset_controller, user, index, user_asset_controller, watchlist
 
 if __name__ == '__main__':
     interfaces = "0.0.0.0" if app.config['FLASK_ENV'] else "127.0.0.1"
