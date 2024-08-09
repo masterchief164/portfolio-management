@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+
 
 @dataclass
 class Transaction:
@@ -10,4 +10,4 @@ class Transaction:
     quantity: int
     price_per_unit: float
     tx_type: str
-    created_at: datetime = datetime.now()
+    value: float

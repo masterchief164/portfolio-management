@@ -33,6 +33,5 @@ class Database:
         cursor = conn.cursor()
         cursor.executemany(query, data)
         conn.commit()
-        cursor.close()
         self.pool.putconn(conn)
         return 'success'

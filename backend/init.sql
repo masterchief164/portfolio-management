@@ -9,7 +9,8 @@ CREATE TABLE users(
 
 CREATE TABLE assets(
 	symbol VARCHAR(50),
-	sector VARCHAR(50),
+    sector VARCHAR(100),
+    name   VARCHAR(250),
 	asset_type VARCHAR(50),
 	name VARCHAR(250)
 );
@@ -25,6 +26,7 @@ CREATE TABLE transactions(
 	price_per_unit DOUBLE PRECISION,
 	tx_type transac_type,
 	created_at TIMESTAMP,
+    value DECIMAL,
 	CONSTRAINT fk_pm FOREIGN KEY(pm_id) REFERENCES users(user_id),
 	CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id),
     CONSTRAINT fk_asset FOREIGN KEY (asset_symbol) REFERENCES assets (symbol)
