@@ -10,7 +10,8 @@ CREATE TABLE users(
 CREATE TABLE assets(
 	symbol VARCHAR(50),
 	sector VARCHAR(50),
-	asset_type VARCHAR(50)
+	asset_type VARCHAR(50),
+	name VARCHAR(250)
 );
 
 CREATE TYPE transac_type as ENUM ('buy', 'sell');

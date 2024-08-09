@@ -1,35 +1,27 @@
-const baseValue = 10000; // Starting point
-const fluctuationRange = 5000; // Random fluctuation amount
-
 export const generateData = () => {
+    const labels = [];
     const data = [];
-    const labels = [
-        "Jun 2021",
-        "Dec 2021",
-        "Jun 2022",
-        "Dec 2022",
-        "Jun 2023",
-        "Dec 2023",
-        "Jan 2024",
-        "Feb 2024",
-        "Mar 2024",
-    ];
-    let currentValue = baseValue;
-    for (let i = 0; i < labels.length; i++) {
-        const fluctuation =
-            Math.random() * fluctuationRange - fluctuationRange / 2;
-        currentValue += fluctuation + 5000; // Ensure overall increase
-        data.push(currentValue);
+    const currentDate = new Date();
+    const numberOfYears = 5; // Data for the past 5 years
+
+    for (let i = 0; i <= numberOfYears; i++) {
+        const year = currentDate.getFullYear() - i;
+        labels.push(year.toString());
+        // Simulate some performance values with a reasonable range
+        data.push(Math.floor(Math.random() * 30000) + 50000); // Random values between 50,000 and 80,000
     }
 
     return {
-        labels,
+        labels: labels.reverse(),
         datasets: [
             {
-                data,
-                fill: false,
-                borderColor: "rgba(75, 192, 192, 1)",
-                tension: 0.1,
+                label: "Portfolio Performance",
+                data: data.reverse(),
+                borderColor: "#42A5F5",
+                backgroundColor: "rgba(66, 165, 245, 0.4)",
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: true,
             },
         ],
     };

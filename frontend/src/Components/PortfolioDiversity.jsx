@@ -1,27 +1,61 @@
-import { Typography, Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Doughnut } from 'react-chartjs-2';
+import { pieData } from "../utils/MockPieChartData";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
+const PortfolioDiversity = () => {
+    const [data, setData] = useState(pieData);
+    useEffect(() => {
+        const getData = async () => {
+            let res = await axios.get('http://localhost:8000/user_assets/3');
+            res = res.data;
+            let labels = [];
+            labels = res?.map(d => d.sector);
+            const totalValue = res.reduce((sum, item) => sum + item.total_value, 0);
+            const percentages = res.map(item => Math.round((item.total_value / totalValue) * 100));
+            
+            setData({
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Portfolio Allocation",
+                        data: percentages,
+                        borderWidth: 1,
+                    },
+                ],
+            });
+        };
+        getData();
+    }, []);
 
-const PortfolioDiversity = ({data}) => {
     const options = {
-        maintainAspectRatio: true,
-        aspectRatio: 1.26,
-        pieceLabel: {
-            render: function(d) { return d.labels + " (" + d.percentage + "%)"; },
-            fontColor: '#000',
-            position: 'outside',
-            segment: true
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
+                    }
+                }
+            }
         }
     };
-    
-    return (
-        <div style={{padding: "20px"}}>
-            <Typography variant='h6' fontWeight="500"> Portfolio Diversity </Typography>
 
-            <Box style={{marginTop: "15px"}}>
-                <Doughnut data={data} options={options}/>
+    return (
+        <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', maxWidth: '100%', }}>
+            <Typography variant='h6' fontWeight="500">Portfolio Diversity</Typography>
+
+            <Box sx={{ marginTop: '5px', paddingBottom: "5px", flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '90%', height: '90%' }}>
+                    <Doughnut data={data} options={options} />
+                </div>
             </Box>
-        </div>
+        </Box>
     );
 };
 
