@@ -8,24 +8,20 @@ def get_user_transactions(user_id: int):
     pool = Database()
     cursor = pool.get_cursor()
     cursor.execute('SELECT * FROM transactions WHERE user_id = %s', (user_id,))
-    transaction_data = cursor.fetchone()
+    transactions_data = cursor.fetchall()
     pool.put_cursor(cursor)
 
-    if transaction_data:
-        return Transaction(**transaction_data)
-    return None
+    return [Transaction(**tx) for tx in transactions_data]
 
 
 def get_pm_transactions(pm_id: int):
     pool = Database()
     cursor = pool.get_cursor()
     cursor.execute('SELECT * FROM transactions WHERE pm_id = %s', (pm_id,))
-    transaction_data = cursor.fetchone()
+    transactions_data = cursor.fetchall()
     pool.put_cursor(cursor)
 
-    if transaction_data:
-        return Transaction(**transaction_data)
-    return None
+    return [Transaction(**tx) for tx in transactions_data]
 
 
 def get_all_transactions() -> List[Transaction]:
