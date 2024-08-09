@@ -32,5 +32,3 @@ def assets():
         except Exception as e:
             print(e)
             return 'error'
-
-# Select asset_symbol  from transactions as t INNER JOIN assets as a ON a.symbol = t.asset_symbol where user_id = 1 group by asset_symbol
