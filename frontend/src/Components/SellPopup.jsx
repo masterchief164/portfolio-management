@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Box, IconButton
 } from '@mui/material';
@@ -26,7 +26,7 @@ const SellPopup = ({ asset, open, onClose }) => {
     } else {
       setTotalPrice(0);
     }
-  }, [quantity, asset.price, asset.quantity]);
+  }, [quantity, asset.price, asset.quantity, availableQuantity]);
 
   const handleQuantityChange = (e) => {
     const value = e.target.value;
