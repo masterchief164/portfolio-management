@@ -30,7 +30,7 @@ def user_invested_value(user_id):
 
 
 @app.route('/valuation/user/<user_id>', methods=['GET'])
-def user_invested_value(user_id):
+def user_current_value(user_id):
     try:
         return balance_service.get_user_current_value(user_id)
     except Exception as e:
@@ -39,7 +39,7 @@ def user_invested_value(user_id):
 
 
 @app.route('/investment/pm/<pm_id>', methods=['GET'])
-def user_invested_value(pm_id):
+def pm_invested_value(pm_id):
     try:
         return balance_service.get_pm_invested_value(pm_id)
     except Exception as e:
@@ -48,7 +48,7 @@ def user_invested_value(pm_id):
 
 
 @app.route('/valuation/pm/<pm_id>', methods=['GET'])
-def user_invested_value(pm_id):
+def pm_current_value(pm_id):
     try:
         return balance_service.get_pm_current_value(pm_id)
     except Exception as e:
