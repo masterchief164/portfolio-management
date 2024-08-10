@@ -14,19 +14,19 @@ const PortfolioDiversity = () => {
             const totalValue = res.reduce((sum, item) => sum + item.total_value, 0);
             const percentages = res.map(item => Math.round((item.total_value / totalValue) * 100));
             
-            setData({
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Portfolio Allocation",
-                        data: percentages,
-                        borderWidth: 1,
-                    },
-                ],
-            });
-        };
-        getData();
-    }, []);
+    //         setData({
+    //             labels: labels,
+    //             datasets: [
+    //                 {
+    //                     label: "Portfolio Allocation",
+    //                     data: percentages,
+    //                     borderWidth: 1,
+    //                 },
+    //             ],
+    //         });
+    //     };
+    //     getData();
+    // }, []);
 
     const options = {
         responsive: true,
@@ -51,7 +51,7 @@ const PortfolioDiversity = () => {
 
             <Box sx={{ marginTop: '5px', paddingBottom: "5px", flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '90%', height: '90%' }}>
-                    <Doughnut data={data} options={options} />
+                    <Doughnut data={pieData} options={options} />
                 </div>
             </Box>
         </Box>
