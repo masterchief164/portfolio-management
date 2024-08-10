@@ -6,11 +6,16 @@ from utils import stock_api
 def get_user_holdings(user_id, txn_type):
     db = Database()
     cursor = db.get_cursor()
-    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value, name from transactions'
-                   ' join assets on transactions.asset_symbol = assets.symbol where user_id = %s and tx_type = %s'
-                   ' group by asset_symbol, name order by asset_symbol;', (user_id, txn_type))
-    sale_holdings = cursor.fetchall()
-    db.put_cursor(cursor)
+    sale_holdings = []
+    try:
+        cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value, name from transactions'
+                       ' join assets on transactions.asset_symbol = assets.symbol where user_id = %s and tx_type = %s'
+                       ' group by asset_symbol, name order by asset_symbol;', (user_id, txn_type))
+        sale_holdings = cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        db.put_cursor(cursor)
     return sale_holdings
 
 
@@ -23,12 +28,17 @@ def get_total_user_holdings(user_id):
 def get_pm_holdings(pm_id, txn_type):
     db = Database()
     cursor = db.get_cursor()
-    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value, name from transactions'
-                   ' join assets on transactions.asset_symbol = assets.symbol where pm_id = %s and tx_type = %s'
-                   ' group by asset_symbol, name order by asset_symbol;', (pm_id, txn_type))
-    sale_holdings = cursor.fetchall()
-    db.put_cursor(cursor)
-    return sale_holdings
+    sale_holdings = []
+    try:
+        cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value, name from transactions'
+                       ' join assets on transactions.asset_symbol = assets.symbol where pm_id = %s and tx_type = %s'
+                       ' group by asset_symbol, name order by asset_symbol;', (pm_id, txn_type))
+        sale_holdings = cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        db.put_cursor(cursor)
+        return sale_holdings
 
 
 def get_total_pm_holdings(pm_id):
@@ -70,28 +80,37 @@ def calculate_net_holdings(buy_holdings, sale_holdings):
                                       value=buy.value, name=buy.name.capitalize()))
         buy_idx += 1
     symbols = [holding.asset_symbol for holding in total_holdings]
-    stocks_data = stock_api.get_stock_prices(symbols)
-    for i in range(len(total_holdings)):
-        total_holdings[i].value = total_holdings[i].quantity * stocks_data[i]['price']
-        total_holdings[i].price = stocks_data[i]['price']
+    try:
+        stocks_data = stock_api.get_stock_prices(symbols)
+        for i in range(len(total_holdings)):
+            total_holdings[i].value = total_holdings[i].quantity * stocks_data[i]['price']
+            total_holdings[i].price = stocks_data[i]['price']
+    except Exception as e:
+        print(e)
+        return []
     return total_holdings
 
 
 def get_user_invested_value(user_id):
     db = Database()
     cursor = db.get_cursor()
-    cursor.execute('select sum(value) as value from transactions where user_id = %s and tx_type = %s;',
-                   (user_id, 'buy'))
-    invested_value = cursor.fetchone()
-    cursor.execute('select sum(value) as value from transactions where user_id = %s and tx_type = %s;',
-                   (user_id, 'sell'))
-    sold_value = cursor.fetchone()
-    if invested_value and sold_value:
-        invested_value = invested_value['value'] - sold_value['value']
-    else:
-        invested_value = 0
-    db.put_cursor(cursor)
-    return invested_value
+    invested_value = 0
+    try:
+        cursor.execute('select sum(value) as value from transactions where user_id = %s and tx_type = %s;',
+                       (user_id, 'buy'))
+        invested_value = cursor.fetchone()
+        cursor.execute('select sum(value) as value from transactions where user_id = %s and tx_type = %s;',
+                       (user_id, 'sell'))
+        sold_value = cursor.fetchone()
+        if invested_value and sold_value and invested_value['value'] and sold_value['value']:
+            invested_value = invested_value['value'] - sold_value['value']
+        else:
+            invested_value = 0
+    except Exception as e:
+        print(e)
+    finally:
+        db.put_cursor(cursor)
+        return invested_value
 
 
 def get_user_current_value(user_id):
@@ -102,17 +121,22 @@ def get_user_current_value(user_id):
 def get_pm_invested_value(pm_id):
     db = Database()
     cursor = db.get_cursor()
-    cursor.execute('select sum(value) as value from transactions where pm_id = %s and tx_type = %s;',
-                   (pm_id, 'buy'))
-    invested_value = cursor.fetchone()
-    cursor.execute('select sum(value) as value from transactions where pm_id = %s and tx_type = %s;',
-                   (pm_id, 'sell'))
-    sold_value = cursor.fetchone()
-    if invested_value and sold_value:
-        invested_value = invested_value['value'] - sold_value['value']
-    else:
-        invested_value = 0
-    db.put_cursor(cursor)
+    invested_value = 0
+    try:
+        cursor.execute('select sum(value) as value from transactions where pm_id = %s and tx_type = %s;',
+                       (pm_id, 'buy'))
+        invested_value = cursor.fetchone()
+        cursor.execute('select sum(value) as value from transactions where pm_id = %s and tx_type = %s;',
+                       (pm_id, 'sell'))
+        sold_value = cursor.fetchone()
+        if invested_value and sold_value and invested_value['value'] and sold_value['value']:
+            invested_value = invested_value['value'] - sold_value['value']
+        else:
+            invested_value = 0
+    except Exception as e:
+        print(e)
+    finally:
+        db.put_cursor(cursor)
     return invested_value
 
 
