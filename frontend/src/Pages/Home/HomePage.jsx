@@ -4,13 +4,9 @@ import AssetAllocationTable from "../../Components/AssetAllocationTable.jsx";
 import { Grid, Paper } from '@mui/material';
 import WatchlistTable from "../../Components/WatchList.jsx";
 import TransactionTable from "../../Components/TransactionTable.jsx";
+import {useEffect, useState} from "react";
+import {getUserAssets, getPmAssets} from "../../utils/httpClient.js";
 
-const assetData = [
-    { name: 'Apple Inc.', symbol: 'AAPL', price: '$150.00', totalValueHeld: '$15,000.00', percentageOfAllocation: '30%', quantity: 100 },
-    { name: 'Microsoft Corp.', symbol: 'MSFT', price: '$280.00', totalValueHeld: '$28,000.00', percentageOfAllocation: '40%', quantity: 100 },
-    { name: 'Tesla Inc.', symbol: 'TSLA', price: '$700.00', totalValueHeld: '$14,000.00', percentageOfAllocation: '20%', quantity: 20 },
-    { name: 'Google LLC', symbol: 'GOOGL', price: '$2,500.00', totalValueHeld: '$10,000.00', percentageOfAllocation: '10%', quantity: 4 }
-  ];
 const watchlistData = [
     {
       User_name: 'Alice Johnson',
@@ -38,7 +34,7 @@ const watchlistData = [
     }
     ];
 
-    const demoData = [
+const demoData = [
       {
         userName: 'Alice Johnson',
         assetName: 'Tesla Inc',
@@ -82,8 +78,22 @@ const watchlistData = [
     ];    
 
 const user = false;
+const id = 3;
 const HomePage = () => {
-    return (
+  const [assets, setAssets] = useState([]);
+  useEffect(() => {
+      if(user) {
+          getUserAssets(id).then((data) => {
+              setAssets(data);
+          });
+      } else {
+          getPmAssets(2).then((data) => {
+              setAssets(data);
+          });
+      }
+  }, []);
+
+  return (
       // <Container>
       <div>
       <Grid>
@@ -99,7 +109,7 @@ const HomePage = () => {
             <Grid item xs={12} md={7} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
               <Paper style={{ padding: '16px', flex: '1', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ flexGrow: 1, overflow: 'auto' }}>
-                  <AssetAllocationTable data={assetData} />
+                  <AssetAllocationTable data={assets} />
                 </div>
               </Paper>
             </Grid>
