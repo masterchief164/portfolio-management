@@ -11,7 +11,6 @@ def get_user_holdings(user_id, txn_type):
                    ' group by asset_symbol, name order by asset_symbol;', (user_id, txn_type))
     sale_holdings = cursor.fetchall()
     db.put_cursor(cursor)
-    print(sale_holdings)
     return sale_holdings
 
 

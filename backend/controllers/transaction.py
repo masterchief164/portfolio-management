@@ -14,7 +14,6 @@ def transactions():
             return 'error'
     else:
         try:
-            print(request.json)
             return transaction_service.add_transaction(request.json)
         except Exception as e:
             print(e)

@@ -14,7 +14,6 @@ def user():
             return 'error'
     else:
         try:
-            print(request.json)
             return user_service.add_user(request.json)
         except Exception as e:
             print(e)

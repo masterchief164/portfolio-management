@@ -2,14 +2,13 @@ import { Box, Typography } from '@mui/material';
 import { Doughnut } from 'react-chartjs-2';
 import { pieData } from "../utils/MockPieChartData";
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import {getPortfolioDiversity} from "../utils/httpClient.js";
 
 const PortfolioDiversity = () => {
     const [data, setData] = useState(pieData);
     useEffect(() => {
         const getData = async () => {
-            let res = await axios.get('http://localhost:8000/user_assets/3');
-            res = res.data;
+            const res = getPortfolioDiversity(3);
             let labels = [];
             labels = res?.map(d => d.sector);
             const totalValue = res.reduce((sum, item) => sum + item.total_value, 0);
