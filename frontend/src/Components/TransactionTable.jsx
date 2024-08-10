@@ -33,11 +33,6 @@ const AssetAllocationTable = ({ data }) => {
     setSearchQuery(event.target.value);
   };
 
-  // const filteredData = data.filter(row =>
-  //   row.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //   row.assetName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //   row.assetSymbol.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

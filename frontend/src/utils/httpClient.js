@@ -83,3 +83,13 @@ export const getPortfolioDiversity = async (userId) => {
         return [];
     }
 };
+
+export const getAssets = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/assets`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};

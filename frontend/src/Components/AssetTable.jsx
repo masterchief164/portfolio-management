@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  TableSortLabel, Paper, TextField, Typography, Box, Button
+  TableSortLabel, Paper, TextField, Typography, Box, Button, TablePagination
 } from '@mui/material';
+import {getAssets, getUserAssets} from "../utils/httpClient.js";
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -20,10 +21,32 @@ const getComparator = (order, orderBy) => {
   };
 };
 
-const AssetTable = ({ data }) => {
+const AssetTable = () => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [data, setData] = useState([]);
+  const rowsPerPage = 10;
+
+  useEffect( () => {
+    getAssets().then((assets) => {
+      getUserAssets(3).then((userAssets) => {
+        let userAssetIndex = 0;
+        for (let i = 0; i < assets.length; i++) {
+          if(userAssetIndex < userAssets.length && assets[i].symbol === userAssets[userAssetIndex].asset_symbol) {
+            assets[i].quantity = userAssets[userAssetIndex].quantity;
+            console.log(assets[i]);
+            userAssetIndex++;
+          } else {
+            assets[i].quantity = 0;
+          }
+        }
+        setData(assets);
+      });
+    });
+  }, []);
+
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -44,10 +67,17 @@ const AssetTable = ({ data }) => {
     }
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
   const filteredData = data.filter(row =>
     row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     row.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
 
   return (
     <div style={{ height: '100%' }}>
@@ -107,11 +137,11 @@ const AssetTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.sort(getComparator(order, orderBy)).map((row, index) => (
+            {paginatedData.sort(getComparator(order, orderBy)).map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.symbol}</TableCell>
-                <TableCell align="right">{row.price}</TableCell>
+                <TableCell align="right">$ {row.price}</TableCell>
                 <TableCell align="right">{row.quantity}</TableCell>
                 <TableCell align="right">
                   <Button
@@ -140,6 +170,14 @@ const AssetTable = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+          rowsPerPageOptions={[]}
+          component="div"
+          count={filteredData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+      />
     </div>
   );
 };
