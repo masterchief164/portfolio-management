@@ -4,7 +4,6 @@ import { ChartManager } from '../utils/ChartManager';
 import { calculateDateRange } from "../utils/utilFunctions";
 
 const TradeView = ({period, mode, company}) => {
-    console.log(company);
     const chartRef = useRef(null);
     const chartManagerRef = useRef(null);
 
