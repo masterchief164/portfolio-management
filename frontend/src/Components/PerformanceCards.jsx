@@ -38,7 +38,7 @@ const PerformanceCards = () => {
 
         };
         getData();
-    }); 
+    }, [selectedUser]); 
 
     // console.log(selectedUser);
     const theme = useTheme();

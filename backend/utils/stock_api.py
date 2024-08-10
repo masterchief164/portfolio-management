@@ -1,20 +1,17 @@
-import requests
 import yfinance as yf
-import json
-# from config.config import app
+import pandas as pd
+import numpy as np
 
 base_url = 'https://financialmodelingprep.com/api/v3/'
-# api_key = app.config['API_KEY']
-
-
-# def get_stock_prices(symbols):
-#     stocks = ','.join(symbols)
-#     response = requests.get(base_url + 'quote-short/' + stocks + '?apikey=' + "MllSDpkXJNTNTHgagppB1YgU0EjLUqSN")
-#     print(response.json())
-#     return response.json()
 
 def get_stock_prices(symbols):
+    print(len(symbols))
     data = yf.download(symbols, interval="1m", period="1d")
     latest_data = data['Close'].iloc[-1]
-    output = [{'symbol': symbol, 'price': round(float(latest_data[symbol]), 2)} for symbol in symbols]
+    output = None
+    if isinstance(latest_data, pd.Series):
+        output = [{'symbol': symbol, 'price': round(float(latest_data[symbol]), 2)} for symbol in symbols]  # Multiple tickers case
+    elif isinstance(latest_data, (float, np.float64)):
+        output = [{'symbol': symbols, 'price': round(float(latest_data), 2)}]  # Single ticker case
+    print(len(output))
     return output
