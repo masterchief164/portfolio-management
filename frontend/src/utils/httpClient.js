@@ -12,7 +12,6 @@ export const getKlinesPerDay = async (from, company = "AAPL") => {
         headers: {},
     };
 
-
     try {
         const response = await axios.request(config);
         let data = response.data.historical;
@@ -35,7 +34,6 @@ export const getKlinesPerDay = async (from, company = "AAPL") => {
         console.log(error);
         return [];
     }
-
 };
 
 export const getStockInfo = async (stock = "AAPL") => {
@@ -70,8 +68,7 @@ export const getPmAssets = async (pmId) => {
     try {
         const response = await axios.get(`${baseUrl}/balance/pm/${pmId}`);
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
         return [];
     }
@@ -80,7 +77,7 @@ export const getPmAssets = async (pmId) => {
 export const getPortfolioDiversity = async (userId) => {
     try {
         const res = await axios.get(`${baseUrl}/user_assets/${userId}`);
-        return  res.data;
+        return res.data;
     } catch (e) {
         console.log(e);
         return [];
