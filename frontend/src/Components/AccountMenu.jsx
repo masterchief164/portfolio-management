@@ -13,7 +13,7 @@ import {
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Logout from '@mui/icons-material/Logout';
 import AddUserDialog from './AddUserDialog';
-import { setSelectedUser } from '../features/user/userSlice';
+import { setSelectedUser, updateUsers } from '../features/user/userSlice';
 import { selectSelectedUser } from '../features/user/userSelectors';
 import { get_users } from '../utils/user_utils';
 import randomColor from 'randomcolor';
@@ -21,17 +21,17 @@ import randomColor from 'randomcolor';
 export default function AccountMenu() {
   const dispatch = useDispatch();
   const selectedUser = useSelector(selectSelectedUser);
-  const [users,setUsers] = useState([]);
+  const users = useSelector((store) => store.user.users);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAddUserDialogOpen, setAddUserDialogOpen] = useState(false);
 
   useEffect(() => {
     const getUsers = async() => {
       const data = await get_users();
-      setUsers(data);
+      dispatch(updateUsers(data));
     };
     getUsers();
-  }, [selectedUser]);
+  }, [dispatch]);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

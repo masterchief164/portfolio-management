@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import randomColor from 'randomcolor';
 import { add_user, get_users } from '../utils/user_utils';
+import { useDispatch } from 'react-redux';
+import { updateUsers } from '../features/user/userSlice';
 
 export default function AddUserDialog({ open, onClose }) {
   // const dispatch = useDispatch();
@@ -29,7 +31,8 @@ export default function AddUserDialog({ open, onClose }) {
       };
       // console.log("Adding user");
       await add_user(newUser);
-      await get_users();
+      const users = await get_users();
+      dispatch(updateUsers(users));
       // console.log("");
       // dispatch(setSelectedUser(newUser));
       setFirstName('');
