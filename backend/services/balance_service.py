@@ -70,6 +70,7 @@ def calculate_net_holdings(buy_holdings, sale_holdings):
     symbols = [holding.asset_symbol for holding in total_holdings]
     stocks_data = stock_api.get_stock_prices(symbols)
     for i in range(len(total_holdings)):
+        # print(stocks_data[i])
         total_holdings[i].value = total_holdings[i].quantity * stocks_data[i]['price']
     return total_holdings
 

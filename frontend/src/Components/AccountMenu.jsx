@@ -54,12 +54,13 @@ export default function AccountMenu() {
   };
 
   const selectUser = (val) => {
-    console.log(val);
+    // console.log(val);
     const newVal = {
       id: val.user_id,
       firstName: val.fname,
       lastName: val.lname,
       color: randomColor(),
+      ispm: val.ispm,
     };
     dispatch(setSelectedUser(newVal));
   };

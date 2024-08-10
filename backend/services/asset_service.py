@@ -1,7 +1,6 @@
 from db import Database
 from models.Asset import Asset
 
-
 def add_assets(assets):
     db = Database()
     query = "INSERT INTO assets (symbol, sector, asset_type, name) VALUES (%s, %s, %s, %s)"

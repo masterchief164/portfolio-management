@@ -8,6 +8,7 @@ const initialState = {
         firstName: "Shaswat",
         lastName: "Gupta",
         color: randomColor(),
+        ispm: true,
     },
 };
 
