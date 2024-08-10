@@ -5,7 +5,7 @@ from services import balance_service
 @app.route('/balance/user/<user_id>', methods=['GET'])
 def user_holdings(user_id):
     try:
-        return str(balance_service.get_total_user_holdings(user_id))
+        return balance_service.get_total_user_holdings(user_id)
     except Exception as e:
         print("Error", e)
         return 'error'
@@ -14,7 +14,7 @@ def user_holdings(user_id):
 @app.route('/balance/pm/<pm_id>', methods=['GET'])
 def pm_holdings(pm_id):
     try:
-        return str(balance_service.get_total_pm_holdings(pm_id))
+        return balance_service.get_total_pm_holdings(pm_id)
     except Exception as e:
         print("Error", e)
         return 'error'

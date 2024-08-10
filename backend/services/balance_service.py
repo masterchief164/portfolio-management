@@ -6,10 +6,12 @@ from utils import stock_api
 def get_user_holdings(user_id, txn_type):
     db = Database()
     cursor = db.get_cursor()
-    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value from transactions where'
-                   ' user_id = %s and tx_type = %s group by asset_symbol order by asset_symbol;', (user_id, txn_type))
+    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value, name from transactions'
+                   ' join assets on transactions.asset_symbol = assets.symbol where user_id = %s and tx_type = %s'
+                   ' group by asset_symbol, name order by asset_symbol;', (user_id, txn_type))
     sale_holdings = cursor.fetchall()
     db.put_cursor(cursor)
+    print(sale_holdings)
     return sale_holdings
 
 
@@ -22,8 +24,9 @@ def get_total_user_holdings(user_id):
 def get_pm_holdings(pm_id, txn_type):
     db = Database()
     cursor = db.get_cursor()
-    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value from transactions where'
-                   ' pm_id = %s and tx_type = %s group by asset_symbol order by asset_symbol;', (pm_id, txn_type))
+    cursor.execute('select sum(quantity) as quantity, asset_symbol, sum(value) as value, name from transactions'
+                   ' join assets on transactions.asset_symbol = assets.symbol where pm_id = %s and tx_type = %s'
+                   ' group by asset_symbol, name order by asset_symbol;', (pm_id, txn_type))
     sale_holdings = cursor.fetchall()
     db.put_cursor(cursor)
     return sale_holdings
@@ -45,32 +48,33 @@ def calculate_net_holdings(buy_holdings, sale_holdings):
         buy = buy_holdings[buy_idx]
         if sale.asset_symbol == buy.asset_symbol:
             total_holdings.append(Holding(asset_symbol=sale.asset_symbol, quantity=buy.quantity - sale.quantity,
-                                          value=buy.value - sale.value))
+                                          value=buy.value - sale.value, name=sale.name.capitalize()))
             sale_idx += 1
             buy_idx += 1
         else:
             if buy_idx < len(buy_holdings):
                 total_holdings.append(Holding(asset_symbol=buy.asset_symbol, quantity=buy.quantity,
-                                              value=buy.value))
+                                              value=buy.value, name=buy.name.capitalize()))
                 buy_idx += 1
             if sale_idx < len(sale_holdings):
                 total_holdings.append(Holding(asset_symbol=sale.asset_symbol, quantity=-sale.quantity,
-                                              value=sale.value))
+                                              value=sale.value, name=sale.name.capitalize()))
                 sale_idx += 1
     while sale_idx < len(sale_holdings):
         sale = sale_holdings[sale_idx]
         total_holdings.append(Holding(asset_symbol=sale.asset_symbol, quantity=-sale.quantity,
-                                      value=sale.value))
+                                      value=sale.value, name=sale.name.capitalize()))
         sale_idx += 1
     while buy_idx < len(buy_holdings):
         buy = buy_holdings[buy_idx]
         total_holdings.append(Holding(asset_symbol=buy.asset_symbol, quantity=buy.quantity,
-                                      value=buy.value))
+                                      value=buy.value, name=buy.name.capitalize()))
         buy_idx += 1
     symbols = [holding.asset_symbol for holding in total_holdings]
     stocks_data = stock_api.get_stock_prices(symbols)
     for i in range(len(total_holdings)):
         total_holdings[i].value = total_holdings[i].quantity * stocks_data[i]['price']
+        total_holdings[i].price = stocks_data[i]['price']
     return total_holdings
 
 

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const baseUrl = `${import.meta.env.VITE_BASE_URL}`;
+
 export const getKlinesPerDay = async (from, company = "") => {
     if (company === "") company = "AAPL";
     console.log(
@@ -48,5 +50,15 @@ export const getStockInfo = async (stock = "") => {
     };
 
     const response = await axios.request(config);
+    return response.data;
+};
+
+export const getUserAssets = async (userId) => {
+  const response = await axios.get(`${baseUrl}/balance/user/${userId}`);
+    return response.data;
+};
+
+export const getPmAssets = async (pmId) => {
+    const response = await axios.get(`${baseUrl}/balance/pm/${pmId}`);
     return response.data;
 };
