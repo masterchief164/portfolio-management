@@ -15,7 +15,6 @@ def get_all_assets():
     cursor = pool.get_cursor()  # Get a connection object
     cursor.execute('SELECT * FROM assets')
     assets = cursor.fetchall()
-    # print(assets)
     pool.put_cursor(cursor)  # Put the connection object back to the pool
     assets = [Asset(**asset) for asset in assets]
     return assets

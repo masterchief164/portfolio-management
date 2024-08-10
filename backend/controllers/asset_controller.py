@@ -8,9 +8,7 @@ from services import asset_service
 def assets():
     if request.method == 'POST':
         try:
-            data = request.json
-            print(data)
-            return asset_service.add_assets(data)
+            return asset_service.add_assets(request.json)
         except Exception as e:
             print(e)
             return "error"
