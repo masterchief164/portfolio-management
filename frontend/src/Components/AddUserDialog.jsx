@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import { updateUsers } from '../features/user/userSlice';
 
 export default function AddUserDialog({ open, onClose }) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [age, setAge] = useState('');

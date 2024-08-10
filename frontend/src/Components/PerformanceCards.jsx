@@ -21,6 +21,7 @@ const PerformanceCards = () => {
                 overall_gains = current_value - total_investment;
                 if(overall_gains < 0) setReturnsColor("#e31712"); 
                 else setReturnsColor("#2bb919");
+
                 perc_returns = (overall_gains / total_investment * 100).toLocaleString() + "%";
                 overall_gains = "$" + overall_gains.toLocaleString();
                 total_investment =  "$" + total_investment.toLocaleString();
