@@ -10,6 +10,7 @@ const PerformanceCards = () => {
     const [currentValue, setCurrentValue] = useState(0);
     const [overallGains, setOverallGains] = useState(0);
     const [percReturns, setPercReturns] = useState(0);
+    const [returnsColor, setReturnsColor] = useState("#2bfe27");
 
     useEffect(() => {
         const getData = async() => {
@@ -18,6 +19,8 @@ const PerformanceCards = () => {
                 total_investment = await get_pm_invest(selectedUser.id);
                 current_value = await get_pm_val(selectedUser.id);
                 overall_gains = current_value - total_investment;
+                if(overall_gains < 0) setReturnsColor("#e31712"); 
+                else setReturnsColor("#2bfe27");
                 perc_returns = (overall_gains / total_investment * 100).toLocaleString() + "%";
                 overall_gains = "$" + overall_gains.toLocaleString();
                 total_investment =  "$" + total_investment.toLocaleString();
@@ -26,6 +29,7 @@ const PerformanceCards = () => {
                 total_investment = await get_user_invest(selectedUser.id);
                 current_value = await get_user_val(selectedUser.id);
                 overall_gains = current_value - total_investment;
+                if(overall_gains < 0) setReturnsColor("#e31712");
                 perc_returns = (overall_gains / total_investment * 100).toLocaleString() + "%";
                 overall_gains = "$" + overall_gains.toLocaleString();
                 total_investment = "$" + total_investment.toLocaleString();
@@ -61,15 +65,15 @@ const PerformanceCards = () => {
                 <>
                     <Card title="Total Investment" value={totalInvestment} />
                     <Card title="Current Value" value={currentValue} />
-                    <Card title="Overall Gain/Loss" value={overallGains} color="#2bfe27" />
-                    <Card title="Returns (%)" value={percReturns} color="#2bfe27" />
+                    <Card title="Overall Gain/Loss" value={overallGains} color={returnsColor} />
+                    <Card title="Returns (%)" value={percReturns} color={returnsColor} />
                 </>
             )}
             {isLgUp && !isXlUp && (
                 <>
                     <Card title="Total Investment" value={totalInvestment} />
                     <Card title="Current Value" value={currentValue} />
-                    <Card title="Overall Gain/Loss" value={overallGains} color="#2bfe27" />
+                    <Card title="Overall Gain/Loss" value={overallGains} color={returnsColor} />
                     {/* <Card title="Returns (%)" value="+28.96%" color="#2bfe27" /> */}
                 </>
             )}
