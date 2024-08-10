@@ -1,11 +1,23 @@
-import { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box, TablePagination } from '@mui/material';
+import {useEffect, useState} from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Paper,
+  TextField,
+  Typography,
+  Box,
+  TablePagination } from '@mui/material';
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
   return (a, b) => {
     // Handling string columns (name and symbol)
-    if (orderBy === 'name' || orderBy === 'symbol') {
+    if (orderBy === 'name' || orderBy === 'asset_symbol') {
       return (order === 'asc'
         ? a[orderBy].localeCompare(b[orderBy])
         : b[orderBy].localeCompare(a[orderBy]));
@@ -24,7 +36,16 @@ const AssetAllocationTable = ({ data }) => {
   const [orderBy, setOrderBy] = useState('name');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
-  const rowsPerPage = 4;
+  const rowsPerPage = 10;
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    let total= 0;
+    data.forEach((row) => {
+      total += row.value;
+    });
+    setTotal(total);
+  }, [data]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -134,11 +155,11 @@ const AssetAllocationTable = ({ data }) => {
                 backgroundColor: '#f5f5f5', 
               },}}>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.symbol}</TableCell>
-                <TableCell align="right">{row.price}</TableCell>
+                <TableCell>{row.asset_symbol}</TableCell>
+                <TableCell align="right">$ {row.price}</TableCell>
                 <TableCell align="right">{row.quantity}</TableCell>
-                <TableCell align="right">{row.totalValueHeld}</TableCell>
-                <TableCell align="right">{row.percentageOfAllocation}</TableCell>
+                <TableCell align="right">$ {row.value}</TableCell>
+                <TableCell align="right">{((row.value / total) * 100).toFixed(2) + '%'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
