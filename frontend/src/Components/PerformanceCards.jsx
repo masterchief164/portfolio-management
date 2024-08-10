@@ -10,7 +10,7 @@ const PerformanceCards = () => {
     const [currentValue, setCurrentValue] = useState(0);
     const [overallGains, setOverallGains] = useState(0);
     const [percReturns, setPercReturns] = useState(0);
-    const [returnsColor, setReturnsColor] = useState("#2bfe27");
+    const [returnsColor, setReturnsColor] = useState("#2bb919");
 
     useEffect(() => {
         const getData = async() => {
@@ -20,7 +20,7 @@ const PerformanceCards = () => {
                 current_value = await get_pm_val(selectedUser.id);
                 overall_gains = current_value - total_investment;
                 if(overall_gains < 0) setReturnsColor("#e31712"); 
-                else setReturnsColor("#2bfe27");
+                else setReturnsColor("#2bb919");
                 perc_returns = (overall_gains / total_investment * 100).toLocaleString() + "%";
                 overall_gains = "$" + overall_gains.toLocaleString();
                 total_investment =  "$" + total_investment.toLocaleString();

@@ -10,6 +10,7 @@ const initialState = {
         color: randomColor(),
         ispm: true,
     },
+    users: [],
 };
 
 const userSlice = createSlice({
@@ -19,8 +20,11 @@ const userSlice = createSlice({
         setSelectedUser(state, action) {
             state.selectedUser = action.payload;
         },
+        updateUsers(state, action) {
+            state.users = action.payload;
+        },
     },
 });
 
-export const { setSelectedUser } = userSlice.actions;
+export const { setSelectedUser, updateUsers } = userSlice.actions;
 export default userSlice.reducer;
