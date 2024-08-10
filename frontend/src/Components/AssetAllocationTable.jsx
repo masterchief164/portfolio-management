@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box, TablePagination } from '@mui/material';
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -23,6 +23,8 @@ const AssetAllocationTable = ({ data }) => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 4;
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -35,10 +37,22 @@ const AssetAllocationTable = ({ data }) => {
   };
 
   // Filter data based on search query
-  const filteredData = data.filter(row =>
-    row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    row.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  // const filteredData = data.filter(row =>
+  //   row.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   row.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const filteredData = data.filter((row) =>
+    Object.values(row).some((value) =>
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
   );
+
+  const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <div style={{ height: '100%' }}>
@@ -115,8 +129,10 @@ const AssetAllocationTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.sort(getComparator(order, orderBy)).map((row, index) => (
-              <TableRow key={index}>
+            {paginatedData.sort(getComparator(order, orderBy)).map((row, index) => (
+              <TableRow key={index} sx={{'&:hover': {
+                backgroundColor: '#f5f5f5', 
+              },}}>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.symbol}</TableCell>
                 <TableCell align="right">{row.price}</TableCell>
@@ -128,6 +144,14 @@ const AssetAllocationTable = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]} 
+        component="div"
+        count={filteredData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+      />
     </div>
   );
 };

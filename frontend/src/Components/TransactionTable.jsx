@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box,  TablePagination } from '@mui/material';
 const getComparator = (order, orderBy) => {
   return (a, b) => {
     if (orderBy === 'userName' || orderBy === 'assetName' || orderBy === 'assetSymbol') {
@@ -20,6 +20,8 @@ const AssetAllocationTable = ({ data }) => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('userName');
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 4;
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -31,17 +33,28 @@ const AssetAllocationTable = ({ data }) => {
     setSearchQuery(event.target.value);
   };
 
-  const filteredData = data.filter(row =>
-    row.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    row.assetName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    row.assetSymbol.toLowerCase().includes(searchQuery.toLowerCase())
+  // const filteredData = data.filter(row =>
+  //   row.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   row.assetName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   row.assetSymbol.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const filteredData = data.filter((row) =>
+    Object.values(row).some((value) =>
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
   );
+
+  const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <div style={{ height: '100%' }}>
       <Box display="flex" alignItems="center" mb={2}>
         <Typography variant="h6" style={{ flexShrink: 0, marginRight: '16px' }}>
-          Asset Allocation
+          Transaction History
         </Typography>
         <TextField
           label="Search"
@@ -112,8 +125,10 @@ const AssetAllocationTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.sort(getComparator(order, orderBy)).map((row, index) => (
-              <TableRow key={index}>
+            {paginatedData.sort(getComparator(order, orderBy)).map((row, index) => (
+              <TableRow key={index} sx={{'&:hover': {
+                    backgroundColor: '#f5f5f5', 
+                  },}}>
                 <TableCell>{row.userName}</TableCell>
                 <TableCell>{row.assetName}</TableCell>
                 <TableCell>{row.assetSymbol}</TableCell>
@@ -125,6 +140,14 @@ const AssetAllocationTable = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]} 
+        component="div"
+        count={filteredData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+      />
     </div>
   );
 };
