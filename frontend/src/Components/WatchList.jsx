@@ -105,7 +105,9 @@ const WatchlistTable = ({ data }) => {
           </TableHead>
           <TableBody>
             {filteredData.sort(getComparator(order, orderBy)).map((row, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} sx={{'&:hover': {
+                backgroundColor: '#f5f5f5', 
+              },}}>
                 <TableCell>{row.User_name}</TableCell>
                 <TableCell>{row.Asset_name}</TableCell>
                 <TableCell align="right">{row.Price_per_unit}</TableCell>
