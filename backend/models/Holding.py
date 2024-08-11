@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Holding:
-    asset_symbol: str
+    symbol: str
     quantity: int
-    value: float
     name: str
+    value: float = 0.0
     price: float = 0.0

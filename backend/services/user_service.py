@@ -5,7 +5,7 @@ from models.User import User
 def get_users():
     pool = Database()
     cursor = pool.get_cursor()  # Get a connection object
-    cursor.execute('SELECT * FROM users')
+    cursor.execute('SELECT * FROM users order by user_id')
     users = cursor.fetchall()
     pool.put_cursor(cursor)  # Put the connection object back to the pool
     users = [User(**user) for user in users]
