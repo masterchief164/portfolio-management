@@ -63,3 +63,42 @@ def get_asset_by_symbol(symbol):
     pool.put_cursor(cursor)
     assets = [Asset(**asset) for asset in assets]
     return assets
+
+
+def get_pm_sector_allocation(pm_id):
+    pool = Database()
+    cursor = pool.get_cursor()
+    query = ('SELECT a.sector, SUM(CASE WHEN t.tx_type= %s THEN t.value WHEN t.tx_type= %s THEN -t.value ELSE 0 END) as'
+             ' total_value FROM transactions as t INNER JOIN assets as a ON a.symbol=t.asset_symbol WHERE t.pm_id = %s '
+             'GROUP BY a.sector')
+    params = ("buy", "sell", pm_id)
+    cursor.execute(query, params)
+    sector_alloc = cursor.fetchall()
+    pool.put_cursor(cursor)
+    return calc_percentage_allocation(sector_alloc)
+
+
+def get_user_sector_allocation(user_id):
+    pool = Database()
+    cursor = pool.get_cursor()
+    query = ('SELECT a.sector, SUM(CASE WHEN t.tx_type= %s THEN t.value WHEN t.tx_type= %s THEN -t.value ELSE 0 END) as'
+             ' total_value FROM transactions as t INNER JOIN assets as a ON a.symbol=t.asset_symbol WHERE '
+             't.user_id = %s GROUP BY a.sector')
+    params = ("buy", "sell", user_id)
+    cursor.execute(query, params)
+    sector_alloc = cursor.fetchall()
+    pool.put_cursor(cursor)
+    return calc_percentage_allocation(sector_alloc)
+
+
+def calc_percentage_allocation(sector_alloc):
+    total_value_all_sectors = sum(float(item["total_value"]) for item in sector_alloc)
+    percentage_alloc = [
+        {
+            "sector": item["sector"],
+            "perc_alloc": round((float(item["total_value"]) / total_value_all_sectors) * 100, 2)
+        }
+        for item in sector_alloc
+    ]
+    return percentage_alloc
+
