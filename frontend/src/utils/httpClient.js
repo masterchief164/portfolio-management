@@ -84,7 +84,6 @@ export const getAssets = async () => {
     }
 };
 
-
 export const getPmTransactions = async (pmId) => {
     try {
         const response = await axios.get(`${baseUrl}/transactions/pm/${pmId}`);
@@ -95,7 +94,6 @@ export const getPmTransactions = async (pmId) => {
     }
 };
 
-
 export const getUserWatchlist = async (userId) => {
     try {
         const response = await axios.get(`${baseUrl}/watchlist/${userId}`);
@@ -103,5 +101,29 @@ export const getUserWatchlist = async (userId) => {
     } catch (error) {
         console.log(error);
         return [];
+    }
+};
+
+export const addTxn = async (
+    pm_id,
+    user_id,
+    asset_symbol,
+    quantity,
+    price_per_unit,
+    tx_type
+) => {
+    try {
+        await axios.post(`${baseUrl}/transactions`, [
+            {
+                pm_id,
+                user_id,
+                asset_symbol,
+                quantity,
+                price_per_unit,
+                tx_type,
+            },
+        ]);
+    } catch (error) {
+        console.log(error);
     }
 };

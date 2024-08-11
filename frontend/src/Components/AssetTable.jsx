@@ -5,6 +5,8 @@ import {
 } from '@mui/material';
 import {getAssets, getPmAssets, getUserAssets} from "../utils/httpClient.js";
 import {useSelector} from "react-redux";
+import BuyPopup from './BuyPopup.jsx';
+import SellPopup from './SellPopup.jsx';
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -28,6 +30,9 @@ const AssetTable = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [data, setData] = useState([]);
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [isBuyPopupOpen, setBuyPopupOpen] = useState(false);
+  const [isSellPopupOpen, setSellPopupOpen] = useState(false);
   const rowsPerPage = 10;
   const selectedUser = useSelector((store) => store.user.selectedUser);
 
@@ -74,14 +79,29 @@ const AssetTable = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleTransaction = (asset, type) => {
-    if (type === 'buy') {
-      // Handle buy logic here
-      console.log(`Buying ${asset.name}`);
-    } else {
-      // Handle sell logic here
-      console.log(`Selling ${asset.name}`);
-    }
+  // const handleTransaction = (asset, type) => {
+  //   if (type === 'buy') {
+  //     // Handle buy logic here
+  //     console.log(`Buying ${asset.name}`);
+  //   } else {
+  //     // Handle sell logic here
+  //     console.log(`Selling ${asset.name}`);
+  //   }
+  // };
+
+  const handleOpenBuyPopup = (asset) => {
+    setSelectedAsset(asset);
+    setBuyPopupOpen(true);
+  };
+
+  const handleOpenSellPopup = (asset) => {
+    setSelectedAsset(asset);
+    setSellPopupOpen(true);
+  };
+
+  const handleClosePopups = () => {
+    setBuyPopupOpen(false);
+    setSellPopupOpen(false);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -164,7 +184,7 @@ const AssetTable = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleTransaction(row, 'buy')}
+                    onClick={() => handleOpenBuyPopup(row)}
                     style={{ marginRight: '8px' }}
                   >
                     Buy
@@ -172,7 +192,7 @@ const AssetTable = () => {
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => handleTransaction(row, 'sell')}
+                    onClick={() => handleOpenSellPopup(row)}
                     disabled={row.quantity <= 0}
                     style={{
                       opacity: row.quantity <= 0 ? 0.5 : 1,
@@ -187,6 +207,12 @@ const AssetTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {selectedAsset && (
+        <>
+          <BuyPopup asset={selectedAsset} open={isBuyPopupOpen} onClose={handleClosePopups} />
+          <SellPopup asset={selectedAsset} open={isSellPopupOpen} onClose={handleClosePopups} />
+        </>
+      )}
       <TablePagination
           rowsPerPageOptions={[]}
           component="div"
