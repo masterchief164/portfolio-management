@@ -106,34 +106,25 @@ const AssetAllocationTable = () => {
                   User Name
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
+              <TableCell align="center">
                 <TableSortLabel
                   active={orderBy === 'assetName'}
                   direction={orderBy === 'assetName' ? order : 'asc'}
                   onClick={() => handleRequestSort('assetName')}
                 >
-                  Asset Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === 'assetSymbol'}
-                  direction={orderBy === 'assetSymbol' ? order : 'asc'}
-                  onClick={() => handleRequestSort('assetSymbol')}
-                >
                   Asset Symbol
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === 'timestamp'}
-                  direction={orderBy === 'timestamp' ? order : 'asc'}
-                  onClick={() => handleRequestSort('timestamp')}
-                >
-                  Timestamp
-                </TableSortLabel>
-              </TableCell>
-              <TableCell align="right">
+              {/*<TableCell align="center">*/}
+              {/*  <TableSortLabel*/}
+              {/*    active={orderBy === 'timestamp'}*/}
+              {/*    direction={orderBy === 'timestamp' ? order : 'asc'}*/}
+              {/*    onClick={() => handleRequestSort('timestamp')}*/}
+              {/*  >*/}
+              {/*    Timestamp*/}
+              {/*  </TableSortLabel>*/}
+              {/*</TableCell>*/}
+              <TableCell align="center">
                 <TableSortLabel
                   active={orderBy === 'quantity'}
                   direction={orderBy === 'quantity' ? order : 'asc'}
@@ -142,13 +133,22 @@ const AssetAllocationTable = () => {
                   Quantity
                 </TableSortLabel>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <TableSortLabel
                   active={orderBy === 'pricePerUnit'}
                   direction={orderBy === 'pricePerUnit' ? order : 'asc'}
                   onClick={() => handleRequestSort('pricePerUnit')}
                 >
-                  Price Per Unit
+                  Price
+                </TableSortLabel>
+              </TableCell>
+              <TableCell align="center">
+                <TableSortLabel
+                    active={orderBy === 'assetSymbol'}
+                    direction={orderBy === 'assetSymbol' ? order : 'asc'}
+                    onClick={() => handleRequestSort('assetSymbol')}
+                >
+                  Type
                 </TableSortLabel>
               </TableCell>
             </TableRow>
@@ -159,11 +159,11 @@ const AssetAllocationTable = () => {
                     backgroundColor: '#f5f5f5', 
                   },}}>
                 <TableCell>{row.userName}</TableCell>
-                <TableCell>{row.assetName}</TableCell>
-                <TableCell>{row.assetSymbol}</TableCell>
-                <TableCell>{new Date(row.timestamp).toLocaleString()}</TableCell>
-                <TableCell align="right">{row.quantity}</TableCell>
-                <TableCell align="right">{row.price_per_unit}</TableCell>
+                <TableCell align="center">{row.assetSymbol}</TableCell>
+                {/*<TableCell align="center">{new Date(row.timestamp).toLocaleString()}</TableCell>*/}
+                <TableCell align="center">{row.quantity}</TableCell>
+                <TableCell align="center">{row.price_per_unit}</TableCell>
+                <TableCell align="center">{row.tx_type}</TableCell>
               </TableRow>
             ))}
           </TableBody>

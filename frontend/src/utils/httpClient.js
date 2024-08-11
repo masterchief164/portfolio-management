@@ -127,3 +127,24 @@ export const addTxn = async (
         console.log(error);
     }
 };
+
+
+export const addToWatchlist =  (userId, asset_symbol, price) => {
+    try {
+        console.log(price);
+        return axios.post(`${baseUrl}/watchlist/${userId}`, {
+            asset_symbol,
+            price,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const removeFromWatchlist = (userId, asset_symbol) => {
+    try {
+        return axios.delete(`${baseUrl}/watchlist/${userId}/${asset_symbol}`);
+    } catch (error) {
+        console.log(error);
+    }
+};

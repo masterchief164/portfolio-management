@@ -14,7 +14,7 @@ def add_assets(assets):
 def get_all_assets():
     pool = Database()
     cursor = pool.get_cursor()  # Get a connection object
-    cursor.execute('SELECT * FROM assets order by name')
+    cursor.execute('SELECT * FROM assets order by symbol')
     assets = cursor.fetchall()
     pool.put_cursor(cursor)  # Put the connection object back to the pool
     symbols = [asset['symbol'] for asset in assets]
@@ -31,7 +31,7 @@ def get_all_assets():
 def get_asset_by_sector(sector):
     pool = Database()
     cursor = pool.get_cursor()
-    query = 'SELECT * FROM assets WHERE sector = %s'
+    query = 'SELECT * FROM assets WHERE sector = %s order by symbol'
     params = (sector,)
     cursor.execute(query, params)
     assets = cursor.fetchall()
@@ -43,7 +43,7 @@ def get_asset_by_sector(sector):
 def get_asset_by_name(name):
     pool = Database()
     cursor = pool.get_cursor()
-    query = 'SELECT * FROM assets WHERE name = %s'
+    query = 'SELECT * FROM assets WHERE name = %s order by symbol'
     params = (name,)
     cursor.execute(query, params)
     assets = cursor.fetchall()
@@ -55,7 +55,7 @@ def get_asset_by_name(name):
 def get_asset_by_symbol(symbol):
     pool = Database()
     cursor = pool.get_cursor()
-    query = 'SELECT * FROM assets WHERE symbol = %s'
+    query = 'SELECT * FROM assets WHERE symbol = %s sort by symbol'
     params = (symbol,)
     cursor.execute(query, params)
     assets = cursor.fetchall()

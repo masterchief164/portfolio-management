@@ -1,12 +1,20 @@
 import {useEffect, useState} from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  TableSortLabel, Paper, TextField, Typography, Box, Button, TablePagination
+  TableSortLabel, Paper, TextField, Typography, Box, Button, TablePagination, IconButton
 } from '@mui/material';
-import {getAssets, getPmAssets, getUserAssets} from "../utils/httpClient.js";
+import {
+  addToWatchlist,
+  getAssets,
+  getPmAssets,
+  getUserAssets,
+  getUserWatchlist,
+  removeFromWatchlist
+} from "../utils/httpClient.js";
 import {useSelector} from "react-redux";
 import BuyPopup from './BuyPopup.jsx';
 import SellPopup from './SellPopup.jsx';
+import {Star, StarBorder} from "@mui/icons-material";
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -43,7 +51,7 @@ const AssetTable = () => {
         getPmAssets(selectedUser.id).then((pmAssets) => {
           let userAssetIndex = 0;
           for (let i = 0; i < assets.length; i++) {
-            if (userAssetIndex < pmAssets.length && assets[i].symbol === pmAssets[userAssetIndex].asset_symbol) {
+            if (userAssetIndex < pmAssets.length && assets[i].symbol === pmAssets[userAssetIndex].symbol) {
               assets[i].quantity = pmAssets[userAssetIndex].quantity;
               userAssetIndex++;
             } else {
@@ -54,16 +62,30 @@ const AssetTable = () => {
         });
       } else {
         getUserAssets(selectedUser.id).then((userAssets) => {
-          let userAssetIndex = 0;
-          for (let i = 0; i < assets.length; i++) {
-            if (userAssetIndex < userAssets.length && assets[i].symbol === userAssets[userAssetIndex].asset_symbol) {
-              assets[i].quantity = userAssets[userAssetIndex].quantity;
-              userAssetIndex++;
-            } else {
-              assets[i].quantity = 0;
+          getUserWatchlist(selectedUser.id).then((watchlist) => {
+
+            let userAssetIndex = 0;
+            let watchlistIndex = 0;
+            for (let i = 0; i < assets.length; i++) {
+              if (userAssetIndex < userAssets.length && assets[i].symbol === userAssets[userAssetIndex].symbol) {
+                assets[i].quantity = userAssets[userAssetIndex].quantity;
+                userAssetIndex++;
+              } else {
+                assets[i].quantity = 0;
+              }
             }
-          }
-          setData(assets);
+            for (let i = 0; i < assets.length; i++) {
+
+                if (watchlistIndex < watchlist.length && assets[i].symbol === watchlist[watchlistIndex].asset_symbol) {
+                    assets[i].watchlist = true;
+                    watchlistIndex++;
+                } else {
+                  assets[i].watchlist = false;
+                }
+            }
+            setData(assets);
+        });
+
         });
       }
     });
@@ -77,6 +99,26 @@ const AssetTable = () => {
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleWatchlist = async (asset) => {
+    if(asset.watchlist) {
+        const resp =  await removeFromWatchlist(selectedUser.id, asset.symbol);
+        if(resp.data === 'success') {
+          const newData = [...data];
+          const index = newData.findIndex((a) => a.symbol === asset.symbol);
+          newData[index].watchlist = false;
+          setData(newData);
+        }
+    } else {
+        const resp =  await addToWatchlist(selectedUser.id, asset.symbol, asset.price);
+        if(resp.data === 'success') {
+          const newData = [...data];
+          const index = newData.findIndex((a) => a.symbol === asset.symbol);
+          newData[index].watchlist = true;
+          setData(newData);
+        }
+    }
   };
 
   // const handleTransaction = (asset, type) => {
@@ -201,6 +243,10 @@ const AssetTable = () => {
                   >
                     Sell
                   </Button>
+
+                  {!selectedUser.ispm &&<IconButton onClick={()=> handleWatchlist(row)}>
+                    {row.watchlist ? <Star/> : <StarBorder/>}
+                  </IconButton>}
                 </TableCell>
               </TableRow>
             ))}

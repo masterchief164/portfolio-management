@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Watchlist:
-    wishlist_id: int
+    watchlist_id: int
     user_id: int
     asset_symbol: str
     price_per_unit: float

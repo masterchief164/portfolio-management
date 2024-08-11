@@ -155,7 +155,7 @@ const AssetAllocationTable = ({ data }) => {
                 backgroundColor: '#f5f5f5', 
               },}}>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.asset_symbol}</TableCell>
+                <TableCell>{row.symbol}</TableCell>
                 <TableCell align="right">$ {row.price}</TableCell>
                 <TableCell align="right">{row.quantity}</TableCell>
                 <TableCell align="right">$ {row.value}</TableCell>

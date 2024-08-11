@@ -6,7 +6,7 @@ import {getUserWatchlist} from "../utils/httpClient.js";
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
   return (a, b) => {
-    if (orderBy === 'User_name' || orderBy === 'Asset_name') {
+    if (orderBy === 'Asset_name' || orderBy === 'symbol') {
       // String comparison
       return (order === 'asc'
         ? a[orderBy].localeCompare(b[orderBy])
@@ -39,18 +39,18 @@ const WatchlistTable = () => {
     if(!selectedUser.ispm){
       getUserWatchlist(selectedUser.id).then((watchlist) => {
         watchlist = watchlist.map((row) => {
-          watchlist.User_name = row.fname + " " + row.lname;
-            watchlist.Asset_name = row.name;
-            watchlist.Price_per_unit = row.price_per_unit;
-            watchlist.Timestamp = row.created_at;
-            delete watchlist.fname;
-            delete watchlist.lname;
-            delete watchlist.name;
-            delete watchlist.price_per_unit;
-            delete watchlist.created_at;
-            return watchlist;
+            row.Asset_name = row.name;
+            row.Price_per_unit = row.price_per_unit;
+            row.Timestamp = new Date(row.created_at);
+            delete row.fname;
+            delete row.lname;
+            delete row.name;
+            delete row.price_per_unit;
+            delete row.created_at;
+            return row;
         });
         setData(watchlist);
+        console.log(watchlist);
       });
     }
   }, [selectedUser]);
@@ -68,7 +68,7 @@ const WatchlistTable = () => {
 
   // Filter data based on search query
   const filteredData = data.filter(row =>
-    row.User_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    row.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
     row.Asset_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -92,20 +92,20 @@ const WatchlistTable = () => {
             <TableRow>
               <TableCell>
                 <TableSortLabel
-                  active={orderBy === 'User_name'}
-                  direction={orderBy === 'User_name' ? order : 'asc'}
-                  onClick={() => handleRequestSort('User_name')}
+                    active={orderBy === 'Asset_name'}
+                    direction={orderBy === 'Asset_name' ? order : 'asc'}
+                    onClick={() => handleRequestSort('Asset_name')}
                 >
-                  User Name
+                  Asset Name
                 </TableSortLabel>
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={orderBy === 'Asset_name'}
-                  direction={orderBy === 'Asset_name' ? order : 'asc'}
-                  onClick={() => handleRequestSort('Asset_name')}
+                  active={orderBy === 'symbol'}
+                  direction={orderBy === 'symbol' ? order : 'asc'}
+                  onClick={() => handleRequestSort('symbol')}
                 >
-                  Asset Name
+                  Symbol
                 </TableSortLabel>
               </TableCell>
               <TableCell align="right">
@@ -129,16 +129,22 @@ const WatchlistTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.sort(getComparator(order, orderBy)).map((row, index) => (
-              <TableRow key={index} sx={{'&:hover': {
-                backgroundColor: '#f5f5f5', 
-              },}}>
-                <TableCell>{row.User_name}</TableCell>
-                <TableCell>{row.Asset_name}</TableCell>
-                <TableCell align="right">{row.Price_per_unit}</TableCell>
-                <TableCell align="right">{row.Timestamp}</TableCell>
-              </TableRow>
-            ))}
+            {filteredData.sort(getComparator(order, orderBy)).map((row) => {
+              console.log(row);
+              return (
+
+                  <TableRow key={row.Asset_name} sx={{
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5',
+                    },
+                  }}>
+                    <TableCell>{row.Asset_name}</TableCell>
+                    <TableCell>{row.symbol}</TableCell>
+                    <TableCell align="right">${row.Price_per_unit}</TableCell>
+                    <TableCell align="right">{row.Timestamp.toDateString()}</TableCell>
+                  </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
