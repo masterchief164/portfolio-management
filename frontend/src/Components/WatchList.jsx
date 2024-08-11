@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box } from '@mui/material';
+import {useSelector} from "react-redux";
+import {getUserWatchlist} from "../utils/httpClient.js";
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -26,10 +28,33 @@ const getComparator = (order, orderBy) => {
   };
 };
 
-const WatchlistTable = ({ data }) => {
+const WatchlistTable = () => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('User_name');
   const [searchQuery, setSearchQuery] = useState('');
+  const selectedUser = useSelector((store) => store.user.selectedUser);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if(!selectedUser.ispm){
+      getUserWatchlist(selectedUser.id).then((watchlist) => {
+        watchlist = watchlist.map((row) => {
+          watchlist.User_name = row.fname + " " + row.lname;
+            watchlist.Asset_name = row.name;
+            watchlist.Price_per_unit = row.price_per_unit;
+            watchlist.Timestamp = row.created_at;
+            delete watchlist.fname;
+            delete watchlist.lname;
+            delete watchlist.name;
+            delete watchlist.price_per_unit;
+            delete watchlist.created_at;
+            return watchlist;
+        });
+        setData(watchlist);
+      });
+    }
+  }, [selectedUser]);
+
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';

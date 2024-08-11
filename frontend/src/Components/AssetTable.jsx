@@ -3,7 +3,8 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   TableSortLabel, Paper, TextField, Typography, Box, Button, TablePagination
 } from '@mui/material';
-import {getAssets, getUserAssets} from "../utils/httpClient.js";
+import {getAssets, getPmAssets, getUserAssets} from "../utils/httpClient.js";
+import {useSelector} from "react-redux";
 
 // Helper function for sorting
 const getComparator = (order, orderBy) => {
@@ -28,24 +29,40 @@ const AssetTable = () => {
   const [page, setPage] = useState(0);
   const [data, setData] = useState([]);
   const rowsPerPage = 10;
+  const selectedUser = useSelector((store) => store.user.selectedUser);
+
 
   useEffect( () => {
     getAssets().then((assets) => {
-      getUserAssets(3).then((userAssets) => {
-        let userAssetIndex = 0;
-        for (let i = 0; i < assets.length; i++) {
-          if(userAssetIndex < userAssets.length && assets[i].symbol === userAssets[userAssetIndex].asset_symbol) {
-            assets[i].quantity = userAssets[userAssetIndex].quantity;
-            console.log(assets[i]);
-            userAssetIndex++;
-          } else {
-            assets[i].quantity = 0;
+      if(selectedUser.ispm) {
+        getPmAssets(selectedUser.id).then((pmAssets) => {
+          let userAssetIndex = 0;
+          for (let i = 0; i < assets.length; i++) {
+            if (userAssetIndex < pmAssets.length && assets[i].symbol === pmAssets[userAssetIndex].asset_symbol) {
+              assets[i].quantity = pmAssets[userAssetIndex].quantity;
+              userAssetIndex++;
+            } else {
+              assets[i].quantity = 0;
+            }
           }
-        }
-        setData(assets);
-      });
+          setData(assets);
+        });
+      } else {
+        getUserAssets(selectedUser.id).then((userAssets) => {
+          let userAssetIndex = 0;
+          for (let i = 0; i < assets.length; i++) {
+            if (userAssetIndex < userAssets.length && assets[i].symbol === userAssets[userAssetIndex].asset_symbol) {
+              assets[i].quantity = userAssets[userAssetIndex].quantity;
+              userAssetIndex++;
+            } else {
+              assets[i].quantity = 0;
+            }
+          }
+          setData(assets);
+        });
+      }
     });
-  }, []);
+  }, [selectedUser]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
