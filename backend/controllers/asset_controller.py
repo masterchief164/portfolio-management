@@ -30,3 +30,19 @@ def assets():
         except Exception as e:
             print(e)
             return 'error'
+
+
+@app.route('/sector-allocation/pm/<pm_id>')
+def get_pm_sector_alloc(pm_id):
+    try:
+        return asset_service.get_pm_sector_allocation(pm_id)
+    except Exception as e:
+        return "error"
+
+
+@app.route('/sector-allocation/user/<user_id>')
+def get_user_sector_alloc(user_id):
+    try:
+        return asset_service.get_user_sector_allocation(user_id)
+    except Exception as e:
+        return "error"
