@@ -7,31 +7,49 @@ from models.Transaction import Transaction
 def get_user_transactions(user_id: int):
     pool = Database()
     cursor = pool.get_cursor()
-    cursor.execute('SELECT * FROM transactions WHERE user_id = %s', (user_id,))
-    transactions_data = cursor.fetchall()
-    pool.put_cursor(cursor)
-
-    return [Transaction(**tx) for tx in transactions_data]
+    transactions_data = []
+    try:
+        cursor.execute('SELECT * FROM transactions join users u on u.user_id = transactions.user_id'
+                       ' join assets on transactions.asset_symbol = assets.symbol'
+                       ' WHERE u.user_id = %s order by created_at', (user_id,))
+        transactions_data = cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        pool.put_cursor(cursor)
+        return [Transaction(**tx) for tx in transactions_data]
 
 
 def get_pm_transactions(pm_id: int):
     pool = Database()
     cursor = pool.get_cursor()
-    cursor.execute('SELECT * FROM transactions WHERE pm_id = %s', (pm_id,))
-    transactions_data = cursor.fetchall()
-    pool.put_cursor(cursor)
-
-    return [Transaction(**tx) for tx in transactions_data]
+    transactions_data = []
+    try:
+        cursor.execute('SELECT * FROM transactions join public.users u on u.user_id = transactions.user_id'
+                       ' join assets on transactions.asset_symbol = assets.symbol'
+                       ' WHERE pm_id = %s order by created_at', (pm_id,))
+        transactions_data = cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        pool.put_cursor(cursor)
+        return [Transaction(**tx) for tx in transactions_data]
 
 
 def get_all_transactions() -> List[Transaction]:
     pool = Database()
     cursor = pool.get_cursor()
-    cursor.execute('SELECT * FROM transactions')
-    transactions_data = cursor.fetchall()
-    pool.put_cursor(cursor)
-
-    return [Transaction(**tx) for tx in transactions_data]
+    transactions_data = []
+    try:
+        cursor.execute('SELECT * FROM transactions join users on transactions.user_id = users.user_id '
+                       ' join assets on transactions.asset_symbol = assets.symbol '
+                       'order by created_at')
+        transactions_data = cursor.fetchall()
+    except Exception as e:
+        print(e)
+    finally:
+        pool.put_cursor(cursor)
+        return [Transaction(**tx) for tx in transactions_data]
 
 
 def add_transaction(transactions):

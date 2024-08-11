@@ -1,5 +1,4 @@
 from db import Database
-from psycopg2.extensions import AsIs
 from models.Asset import Asset
 from utils.stock_api import get_stock_prices
 

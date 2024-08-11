@@ -1,16 +1,28 @@
 from db import Database
+from models.Watchlist import Watchlist
 
 
 def get_watchlist_items(user_id):
-    # return Exception('test')
-    pool = Database()
-    items = pool.execute_query(
-        'SELECT * FROM watchlist WHERE user_id = %s', (user_id,))
-    return items
+    db = Database()
+    cursor = db.get_cursor()
+    items = []
+    try:
+        cursor.execute(
+            'SELECT * FROM watchlist join public.assets a on watchlist.asset_symbol = a.symbol'
+            ' join public.users u on watchlist.user_id = u.user_id'
+            ' WHERE u.user_id = %s', (user_id,))
+        items = cursor.fetchall()
+        items = [Watchlist(**item) for item in items]
+    except Exception as e:
+        print(e)
+    finally:
+        db.put_cursor(cursor)
+        return items
 
 
-def add_watchlist_item(user_id, item_id):
-    pool = Database()
-    pool.execute_query(
-        'INSERT INTO watchlist (user_id, item_id) VALUES (%s, %s)', (user_id, item_id,))
-    return 'item added'
+def add_watchlist_item(user_id, asset_symbol, price_per_unit):
+    db = Database()
+    query = 'INSERT INTO watchlist (user_id, asset_symbol, price_per_unit) VALUES (%s, %s, %s)'
+    params = (user_id, asset_symbol, price_per_unit)
+    status = db.insert_into_table(query, params)
+    return status

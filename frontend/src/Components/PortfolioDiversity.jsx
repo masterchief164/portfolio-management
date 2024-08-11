@@ -24,31 +24,28 @@ const PortfolioDiversity = () => {
         }
     };
 
-    var res;
-
-    const getData = async() => {
-        if(selectedUser.ispm == true)
-            res = await get_pm_sector_alloc(selectedUser.id);
-        else
-            res = await get_user_sector_alloc(selectedUser.id);
-
-        const labels = res?.map((d) => d.sector);
-        const dataValues = res?.map((d) => d.perc_alloc);
-        setData({
-            labels: labels,
-            datasets: [
-                {
-                    label: "Portfolio Allocation",
-                    data: dataValues,
-                    borderWidth: 1
-                }
-            ]
-        });
-    };
-
     useEffect(() => {
-        getData();
-    }, []);
+        (async function () {
+            let res;
+            if(selectedUser.ispm === true)
+                res = await get_pm_sector_alloc(selectedUser.id);
+            else
+                res = await get_user_sector_alloc(selectedUser.id);
+
+            const labels = res?.map((d) => d.sector);
+            const dataValues = res?.map((d) => d.perc_alloc);
+            setData({
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Portfolio Allocation",
+                        data: dataValues,
+                        borderWidth: 1
+                    }
+                ]
+            });
+        })();
+    }, [selectedUser]);
 
     if(data.length === 0)
         return <div> Loading </div>;

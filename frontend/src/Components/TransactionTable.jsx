@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Paper, TextField, Typography, Box,  TablePagination } from '@mui/material';
+import {getPmTransactions} from "../utils/httpClient.js";
+import {useSelector} from "react-redux";
+
 const getComparator = (order, orderBy) => {
   return (a, b) => {
     if (orderBy === 'userName' || orderBy === 'assetName' || orderBy === 'assetSymbol') {
@@ -9,6 +12,9 @@ const getComparator = (order, orderBy) => {
     if (orderBy === 'timestamp') {
       return (order === 'asc' ? new Date(a[orderBy]) - new Date(b[orderBy]) : new Date(b[orderBy]) - new Date(a[orderBy]));
     }
+    if(orderBy === 'quantity' || orderBy === 'pricePerUnit') {
+        return (order === 'asc' ? a[orderBy] - b[orderBy] : b[orderBy] - a[orderBy]);
+    }
     const aValue = parseFloat(a[orderBy].replace(/[^0-9.-]/g, ''));
     const bValue = parseFloat(b[orderBy].replace(/[^0-9.-]/g, ''));
 
@@ -16,12 +22,40 @@ const getComparator = (order, orderBy) => {
   };
 };
 
-const AssetAllocationTable = ({ data }) => {
+const AssetAllocationTable = () => {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('userName');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
-  const rowsPerPage = 4;
+  const [data, setData] = useState([]);
+  const selectedUser = useSelector((store) => store.user.selectedUser);
+  const rowsPerPage = 10;
+
+  const mapProperties = (transaction) => {
+    transaction.userName = transaction.fname + " " +transaction.lname;
+    transaction.assetSymbol = transaction.asset_symbol;
+    transaction.assetName = transaction.name;
+    transaction.timestamp = transaction.created_at;
+    transaction.pricePerUnit = transaction.price_per_unit;
+    delete transaction.asset_symbol;
+    delete transaction.fname;
+    delete transaction.lname;
+    delete transaction.name;
+    delete transaction.created_at;
+    delete transaction.price;
+    return transaction;
+  };
+
+  useEffect(() => {
+    if(selectedUser.ispm) {
+      getPmTransactions(selectedUser.id).then((transactions) => {
+        transactions = transactions.map((transaction) => {
+          return mapProperties(transaction);
+        });
+        setData(transactions);
+      });
+    }
+  }, [selectedUser]);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -129,7 +163,7 @@ const AssetAllocationTable = ({ data }) => {
                 <TableCell>{row.assetSymbol}</TableCell>
                 <TableCell>{new Date(row.timestamp).toLocaleString()}</TableCell>
                 <TableCell align="right">{row.quantity}</TableCell>
-                <TableCell align="right">{row.pricePerUnit}</TableCell>
+                <TableCell align="right">{row.price_per_unit}</TableCell>
               </TableRow>
             ))}
           </TableBody>

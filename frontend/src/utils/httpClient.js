@@ -74,19 +74,31 @@ export const getPmAssets = async (pmId) => {
     }
 };
 
-export const getPortfolioDiversity = async (userId) => {
+export const getAssets = async () => {
     try {
-        const res = await axios.get(`${baseUrl}/user_assets/${userId}`);
-        return res.data;
-    } catch (e) {
-        console.log(e);
+        const response = await axios.get(`${baseUrl}/assets`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
         return [];
     }
 };
 
-export const getAssets = async () => {
+
+export const getPmTransactions = async (pmId) => {
     try {
-        const response = await axios.get(`${baseUrl}/assets`);
+        const response = await axios.get(`${baseUrl}/transactions/pm/${pmId}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+
+
+export const getUserWatchlist = async (userId) => {
+    try {
+        const response = await axios.get(`${baseUrl}/watchlist/${userId}`);
         return response.data;
     } catch (error) {
         console.log(error);
