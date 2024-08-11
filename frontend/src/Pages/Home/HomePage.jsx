@@ -8,18 +8,17 @@ import {useEffect, useState} from "react";
 import {getUserAssets, getPmAssets} from "../../utils/httpClient.js";
 import {useSelector} from "react-redux";
 
-const id = 3;
 const HomePage = () => {
   const [assets, setAssets] = useState([]);
   const selectedUser = useSelector((store) => store.user.selectedUser);
 
   useEffect(() => {
       if(!selectedUser.ispm) {
-          getUserAssets(id).then((data) => {
+          getUserAssets(selectedUser.id).then((data) => {
               setAssets(data);
           });
       } else {
-          getPmAssets(2).then((data) => {
+          getPmAssets(selectedUser.ispm).then((data) => {
               setAssets(data);
           });
       }
