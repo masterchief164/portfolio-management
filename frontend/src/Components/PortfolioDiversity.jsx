@@ -1,8 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { Doughnut } from 'react-chartjs-2';
-// import { pieData } from "../utils/MockPieChartData";
 import {useSelector} from "react-redux";
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { get_pm_sector_alloc, get_user_sector_alloc } from '../utils/user_utils';
 
 const PortfolioDiversity = () => {
@@ -26,6 +25,7 @@ const PortfolioDiversity = () => {
     };
 
     var res;
+
     const getData = async() => {
         if(selectedUser.ispm == true)
             res = await get_pm_sector_alloc(selectedUser.id);
@@ -46,9 +46,11 @@ const PortfolioDiversity = () => {
         });
     };
 
-    getData();
+    useEffect(() => {
+        getData();
+    }, []);
 
-    if(data.length == 0) 
+    if(data.length === 0)
         return <div> Loading </div>;
     return (
         <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', maxWidth: '100%', }}>
