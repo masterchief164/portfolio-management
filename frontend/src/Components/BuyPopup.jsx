@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { addTxn } from '../utils/httpClient';
 import { companies } from '../utils/AssetData';
 import { setSelectedUser } from '../features/user/userSlice';
@@ -22,7 +22,7 @@ const BuyPopup = ({ asset, open, onClose }) => {
       const parsedQuantity = parseFloat(quantity);
       if (parsedQuantity > 0 && !isNaN(parsedPrice) && parsedPrice > 0) {
         setPrice(parsedPrice);
-        setTotalPrice(quantity*parsedPrice)
+        setTotalPrice(quantity*parsedPrice);
       } else {
         setPrice(0);
         setTotalPrice(0);
@@ -51,7 +51,7 @@ const BuyPopup = ({ asset, open, onClose }) => {
   const dispatch = useDispatch();
   const handleBuy = async () => {
     if (quantity > 0) {
-      const asset_symbol = companies.find((c) => c.name.toLowerCase() == asset.name.toLowerCase())?.symbol
+      const asset_symbol = companies.find((c) => c.name.toLowerCase() === asset.name.toLowerCase())?.symbol;
       addTxn(2, selectedUser.id, asset_symbol, parseFloat(quantity), price, "buy");
       const newUser = JSON.parse(JSON.stringify(selectedUser));
       dispatch(setSelectedUser(newUser));       

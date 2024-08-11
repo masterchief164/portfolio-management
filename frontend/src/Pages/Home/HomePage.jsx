@@ -18,7 +18,7 @@ const HomePage = () => {
               setAssets(data);
           });
       } else {
-          getPmAssets(selectedUser.ispm).then((data) => {
+          getPmAssets(selectedUser.id).then((data) => {
               setAssets(data);
           });
       }

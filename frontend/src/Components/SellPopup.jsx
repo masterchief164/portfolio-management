@@ -62,7 +62,7 @@ const SellPopup = ({ asset, open, onClose }) => {
   const handleSell = () => {
     if (quantity > 0 && quantity <= availableQuantity) {
       console.log("hello");
-      const asset_symbol = companies.find((c) => c.name.toLowerCase() == asset.name.toLowerCase())?.symbol
+      const asset_symbol = companies.find((c) => c.name.toLowerCase() === asset.name.toLowerCase())?.symbol;
       addTxn(2, selectedUser.id, asset_symbol, parseFloat(quantity), price, "sell");
       const newUser = JSON.parse(JSON.stringify(selectedUser));
       dispatch(setSelectedUser(newUser));       
